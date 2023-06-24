@@ -1,4 +1,5 @@
 import pygame
+import time
 
 pygame.init()
 
@@ -26,6 +27,9 @@ class Player():
 		self.width = 38
 		self.height = 46
 		self.vel_y = 0
+		self.start = 0
+		self.end = 0
+		self.landed = False
 		self.rect = pygame.Rect(0, 0, self.width, self.height)
 		self.rect.center = (x,y)
 	
@@ -38,15 +42,22 @@ class Player():
 			dx = -10
 		if key[pygame.K_d]:
 			dx = 10
-		if key[pygame.K_w]:
-			self.vel_y = -10
+		if self.landed == False:
+			pass 
+		else: 			
+			if key[pygame.K_w]:
+					self.landed = False
+					self.vel_y = -12
+					self.start = time.time()
+		
 
 		dy += self.vel_y
 
 		if (self.rect.left +dx <0 or self.rect.right + dx >= screenWidth):
 			dx =0
 
-		if self.rect.bottom > screenHeight:
+		if self.rect.bottom +dy > screenHeight:
+			self.landed = True
 			dy = 0
 
 		self.rect.x += dx 
@@ -57,7 +68,7 @@ class Player():
 		screen.blit(self.image, (self.rect.x - 6, self.rect.y-4))
 		pygame.draw.rect(screen, RED, self.rect, 2)
 
-player1 = Player(screenWidth // 2, screenHeight //2)
+player1 = Player(screenWidth // 2, screenHeight -50)
 
 run = True
 while run == True:
