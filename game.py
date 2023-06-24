@@ -10,7 +10,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
-
+a = 0
 #create game window
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption('DungeonDestroyers')
@@ -19,7 +19,6 @@ pygame.display.set_caption('DungeonDestroyers')
 backgroundImg = pygame.image.load('assets/bg.png').convert_alpha()
 playerImg = pygame.image.load('assets/jump.png').convert_alpha()
 clock = pygame.time.Clock()
-
 #classes
 class Player():
 	def __init__(self,x,y):
@@ -30,11 +29,20 @@ class Player():
 		self.rect.center = (x,y)
 	
 	def move(self):
+		dx = 0
+		dy = 0
+
 		key = pygame.key.get_pressed()
 		if key[pygame.K_a]: 
-			self.rect.x -= 10
+			dx = -10
 		if key[pygame.K_d]:
-			self.rect.x +=10
+			dx = 10
+
+		if (self.rect.left +dx <0 or self.rect.right + dx >= screenWidth):
+			pass
+		else :
+			self.rect.x += dx 
+			self.rect.y += dy
 
 	def draw(self):
 		screen.blit(self.image, (self.rect.x - 6, self.rect.y-4))
