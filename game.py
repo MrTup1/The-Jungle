@@ -31,7 +31,7 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 GRAVITY = 0.8	
 MAX_PLATFORMS = 5
-SCROLL_THRESH = 11
+SCROLL_THRESH = 50
 tiles = math.ceil((screenWidth / backgroundImg_width))
 
 #functionsd
@@ -91,13 +91,21 @@ class Player():
 		if self.rect.right >= screenWidth - SCROLL_THRESH:
 			if dx > 0:
 				scroll = -dx
+		if self.rect.left <= SCROLL_THRESH:
+			if dx < 0: 
+				scroll = dx
+				print("yes")
 
 		if self.rect.bottom +dy > screenHeight:
 			self.rect.bottom = screenHeight
 			self.landed = True
 			dy = 0
 
-		self.rect.x += dx + scroll
+		if dx > 0:
+			self.rect.x += dx + scroll
+		else: 
+			self.rect.x += dx - scroll
+			scroll = scroll * -1
 		self.rect.y +=dy
 
 		return scroll
