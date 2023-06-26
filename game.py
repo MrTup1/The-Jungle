@@ -4,7 +4,7 @@ import math
 import random
 
 pygame.init()
-
+ 
 screenWidth = 1000
 screenHeight = 600
 
@@ -22,14 +22,23 @@ clock = pygame.time.Clock()
 
 #variables
 scroll = 0
+bgScroll = 0
+temp = 0
+
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 GRAVITY = 0.8	
 MAX_PLATFORMS = 5
+SCROLL_THRESH = 11
 tiles = math.ceil((screenWidth / backgroundImg_width))
-print(tiles)
+
+#functionsd
+def draw_bg(bgScroll):
+	screen.blit(backgroundImg, (0 + bgScroll, 0))
+
+ 
 
 #classes
 class Player():
@@ -45,10 +54,12 @@ class Player():
 		self.rect.center = (x,y)
 	
 	def move(self):
+		scroll = 0
 		dx = 0
 		dy = 0
 		self.vel_y += GRAVITY
 		key = pygame.key.get_pressed()
+
 		if key[pygame.K_LEFT] or key[pygame.K_a]: 
 			dx = -10
 		if key[pygame.K_RIGHT] or key[pygame.K_d]:
@@ -71,22 +82,26 @@ class Player():
 						self.vel_y = 0
 						dy = 0
 
-					
-
 		#check collision with ground and side
 		if (self.rect.left +dx <0 or self.rect.right + dx >= screenWidth):
 			screen.blit(backgroundImg, (screenWidth , 0))
 			dx =0
+
+		#check if player moved pass scroll threshold
+		if self.rect.right >= screenWidth - SCROLL_THRESH:
+			if dx > 0:
+				scroll = -dx
 
 		if self.rect.bottom +dy > screenHeight:
 			self.rect.bottom = screenHeight
 			self.landed = True
 			dy = 0
 
-		self.rect.x += dx 
+		self.rect.x += dx + scroll
 		self.rect.y +=dy
 
-
+		return scroll
+		
 	def draw(self):
 		screen.blit(self.image, (self.rect.x - 6, self.rect.y-4))
 		pygame.draw.rect(screen, RED, self.rect, 2)
@@ -99,6 +114,9 @@ class Platform(pygame.sprite.Sprite):
 		self.rect.x = x
 		self.rect.y = y
 
+	def update(self, scroll):
+		self.rect.x += scroll
+
 #Creating Objects
 player1 = Player(screenWidth // 2, screenHeight -50)
 
@@ -107,11 +125,13 @@ platform_group = pygame.sprite.Group()
 
 for p in range(MAX_PLATFORMS):
 	platformWidth = random.randint(100,120)
-	platformX = random.randint(0, screenWidth - platformWidth)
+	platformX = random.randint(int(temp), 3* screenWidth)
 	platformY = random.randint(screenHeight - 320, screenHeight - 60)
 	platform = Platform(platformX, platformY, platformWidth)
 	platform_group.add(platform)
+	temp += platformWidth * 1.2
 
+#game loop
 
 run = True
 while run == True:
@@ -121,16 +141,19 @@ while run == True:
 			run = False
 			
   #game logic		
-	player1.move()
-	#images
-	for i in range(tiles):
-		screen.blit(backgroundImg, (i * backgroundImg_width, 0))
-	
+	scroll = player1.move()
+
 	#scroll background
+	for i in range(tiles):
+		screen.blit(backgroundImg, (i* backgroundImg_width, 0))
+	platform_group.update(scroll)
 
   #draw objects
 	player1.draw()
 	platform_group.draw(screen)
+	#pygame.draw.line(screen, RED, (screenWidth-SCROLL_THRESH, 0) , (screenWidth-SCROLL_THRESH, screenHeight))
+
+
 
 	#update display window
 	pygame.display.update()
