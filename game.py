@@ -60,9 +60,18 @@ class Player():
 					self.landed = False
 					self.vel_y = -20
 					self.start = time.time()	
-
 		dy += self.vel_y
 		#check collision with platforms
+		for platform in platform_group:
+			if platform.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
+				if self.rect.bottom < platform.rect.centery:
+					if self.vel_y > 0:  
+						self.rect.bottom = platform.rect.top
+						self.landed = True
+						self.vel_y = 0
+						dy = 0
+
+					
 
 		#check collision with ground and side
 		if (self.rect.left +dx <0 or self.rect.right + dx >= screenWidth):
@@ -70,6 +79,7 @@ class Player():
 			dx =0
 
 		if self.rect.bottom +dy > screenHeight:
+			self.rect.bottom = screenHeight
 			self.landed = True
 			dy = 0
 
