@@ -151,7 +151,8 @@ while run == True:
 	scroll = player1.move()
 
 	#scroll background
-	bgScroll += scroll
+	scroll2 = scroll * 1.1
+	bgScroll += scroll2
 	for i in range(10000):
 		draw_bg(bgScroll, i, backgroundImg_width)
 	platform_group.update(scroll)
