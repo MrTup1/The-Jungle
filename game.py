@@ -35,8 +35,8 @@ SCROLL_THRESH = 50
 tiles = math.ceil((screenWidth / backgroundImg_width))
 
 #functionsd
-def draw_bg(bgScroll):
-	screen.blit(backgroundImg, (0 + bgScroll, 0))
+def draw_bg(bgScroll, i, backgroundImg_width):
+	screen.blit(backgroundImg, (i* backgroundImg_width + bgScroll, 0))
 
  
 
@@ -94,7 +94,6 @@ class Player():
 		if self.rect.left <= SCROLL_THRESH:
 			if dx < 0: 
 				scroll = dx
-				print("yes")
 
 		if self.rect.bottom +dy > screenHeight:
 			self.rect.bottom = screenHeight
@@ -152,16 +151,14 @@ while run == True:
 	scroll = player1.move()
 
 	#scroll background
-	for i in range(tiles):
-		screen.blit(backgroundImg, (i* backgroundImg_width, 0))
+	bgScroll += scroll
+	for i in range(10000):
+		draw_bg(bgScroll, i, backgroundImg_width)
 	platform_group.update(scroll)
 
   #draw objects
 	player1.draw()
 	platform_group.draw(screen)
-	#pygame.draw.line(screen, RED, (screenWidth-SCROLL_THRESH, 0) , (screenWidth-SCROLL_THRESH, screenHeight))
-
-
 
 	#update display window
 	pygame.display.update()
