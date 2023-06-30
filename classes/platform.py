@@ -1,7 +1,4 @@
 import pygame
-import time
-import math
-import random
 from settings import *
 
 class Platform(pygame.sprite.Sprite):

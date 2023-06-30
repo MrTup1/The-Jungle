@@ -5,12 +5,16 @@ import random
 from settings import *
 from classes.platform import Platform
 from classes.player import Player
+from classes.tile import Tile
+from classes.level import Level
 from functions.background import *
+
 
 pygame.init()
 
 #Creating Objects
 player1 = Player(screenWidth // 2, screenHeight -50)
+level = Level(levelMap, screen)
 
 #create sprite groups
 for p in range(MAX_PLATFORMS):
@@ -21,8 +25,11 @@ for p in range(MAX_PLATFORMS):
 	platform_group.add(platform)
 	temp += platformWidth * 1.2
 
+
+level.setupLevel()
 #game loop
 run = True
+
 while run == True:
 	#event handler
 	for event in pygame.event.get():
@@ -42,6 +49,7 @@ while run == True:
   #draw objects
 	player1.draw()
 	platform_group.draw(screen)
+	level.draw(scroll)
 
 	#update display window
 	pygame.display.update()
