@@ -2,7 +2,7 @@ import math
 import pygame
 
 #game variables
-scroll = 0
+scroll = 8
 bgScroll = 0
 temp = 0
 platform_group = pygame.sprite.Group()
@@ -11,7 +11,7 @@ levelMap = [
 '                            ',
 '                            ',
 ' XX    XXX            XX    ',
-' XX P                       ',
+' XX P                        ',
 ' XXXX         XX         XX ',
 ' XXXX       XX              ',
 ' XX    X  XXXX    XX  XX    ',
