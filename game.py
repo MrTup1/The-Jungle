@@ -39,8 +39,9 @@ while run == True:
   #game logic		
 
 	#scroll background
-	#scroll2 = scroll * 1.1
-	#bgScroll += scroll2
+	scroll = level.scroll_x()
+	scroll2 = scroll * 1.1
+	bgScroll += scroll2
 
 	for i in range(10000):
 		draw_bg(bgScroll, i, backgroundImg_width)

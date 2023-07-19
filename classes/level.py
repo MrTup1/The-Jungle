@@ -46,6 +46,7 @@ class Level:
             self.worldScroll = 0
             player.speed = 8
 
+        return (self.worldScroll)
 
     def draw(self):
         self.tiles.update(self.worldScroll)
