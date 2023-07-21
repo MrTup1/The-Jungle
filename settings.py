@@ -26,10 +26,10 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 GRAVITY = 0.8	
 MAX_PLATFORMS = 5
-SCROLL_THRESH = 50
+SCROLL_THRESH = 200
 tileSize = 64
 
-screenWidth = 2000
+screenWidth = 500
 screenHeight = len(levelMap) * tileSize
 
 
