@@ -46,7 +46,6 @@ while run == True:
 	for i in range(10000):
 		draw_bg(bgScroll, i, backgroundImg_width)
 	platform_group.update(scroll)
-
   #draw objects
 	#platform_group.draw(screen)
 	level.draw()

@@ -59,8 +59,6 @@ class Level:
         player = self.player.sprite
         player.applyGravity()
 
-        print(player.direction.y)
-
         for sprite in self.tiles.sprites():
             if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0:
@@ -69,7 +67,6 @@ class Level:
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
-
     def draw(self):
         self.tiles.update(self.worldScroll)
         self.tiles.draw(self.displaySurface)
