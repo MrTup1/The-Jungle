@@ -20,12 +20,13 @@ for p in range(MAX_PLATFORMS):
 	platformWidth = random.randint(100,120)
 	platformX = random.randint(int(temp), 3* screenWidth)
 	platformY = random.randint(screenHeight - 320, screenHeight - 60)
-	platform = Platform(platformX, platformY, platformWidth)
+	platform = Platform(platformX, platformY, platformWidth) 
 	platform_group.add(platform)
 	temp += platformWidth * 1.2
 
 
 level.setupLevel()
+
 #game loop
 run = True
 
@@ -46,6 +47,7 @@ while run == True:
 	for i in range(10000):
 		draw_bg(bgScroll, i, backgroundImg_width)
 	platform_group.update(scroll)
+
   #draw objects
 	#platform_group.draw(screen)
 	level.draw()
