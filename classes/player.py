@@ -11,7 +11,8 @@ class Player(pygame.sprite.Sprite):
 		self.animationSpeed = 0.15
 		self.image = self.animations['idle'][self.frameIndex]
 		self.rect = self.image.get_rect(topleft = pos)
-		self.landed = False
+		self.status = "idle"
+		self.facing = "right"
 
 		#movement
 		self.direction = pygame.math.Vector2(0,0)
@@ -28,26 +29,45 @@ class Player(pygame.sprite.Sprite):
 			self.animations[animation] = importFolder(fullPath)
 
 	def animate(self):
-		animation = self.animations["run"]
+		animation = self.animations[self.status]
 
 		self.frameIndex += self.animationSpeed
 		if self.frameIndex >= len(animation):
 			self.frameIndex = 0
+
+		image = animation[int(self.frameIndex)]
+		if self.facing == "right":
+			self.image = image
+		else:
+			flippedImg = pygame.transform.flip(image, True, False)
+			self.image = flippedImg
 		
-		self.image = animation[int(self.frameIndex)]
-			
 	def get_input(self):
 		keys = pygame.key.get_pressed()
 		if keys[pygame.K_RIGHT]:
 			self.direction.x = 1
+			self.facing = "right"
 		elif keys[pygame.K_LEFT]:
 			self.direction.x = -1
+			self.facing = "left"
 		else:
 			self.direction.x = 0
 
 		if keys[pygame.K_z]:
 			if (self.direction.y == 0):
 				self.jump()
+
+	def getStatus(self):
+		if self.direction.y < 0:
+			self.status = "jump"
+		elif self.direction.y > 0.8:
+			self.status = "fall"
+		else:
+			if self.direction.x != 0:
+				self.status = "run"
+			else:
+				self.status = "idle"
+		
 
 	def applyGravity(self):
 		self.direction.y += self.gravity
@@ -58,4 +78,5 @@ class Player(pygame.sprite.Sprite):
 
 	def update(self):
 		self.get_input()
+		self.getStatus()
 		self.animate()
