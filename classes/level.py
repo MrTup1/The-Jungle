@@ -64,9 +64,18 @@ class Level:
                 if player.direction.y > 0:
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
+                    player.onGround = True
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
+                    player.onCeiling = True
+
+        if player.onGround and player.direction.y < 0 or player.direction.y > 1:
+            player.onGround = False
+        if player.onCeiling and player.direction.y > 0:
+            player.onCeiling = False
+
+        print(player.onGround)
     def draw(self):
         self.tiles.update(self.worldScroll)
         self.tiles.draw(self.displaySurface)

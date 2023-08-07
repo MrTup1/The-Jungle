@@ -29,7 +29,7 @@ MAX_PLATFORMS = 5
 SCROLL_THRESH = 200
 tileSize = 64
 
-screenWidth = 1000
+screenWidth = 2000
 screenHeight = len(levelMap) * tileSize
 
 
