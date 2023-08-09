@@ -9,6 +9,7 @@ class Level:
         self.displaySurface = surface
         self.Map = levelData
         self.worldScroll = 0
+        self.currentX = 0
 
     def setupLevel(self):
         self.tiles = pygame.sprite.Group()
@@ -52,9 +53,18 @@ class Level:
             if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
+                    player.onLeft = True
+                    self.currentX = player.rect.left
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
-                
+                    player.onRight = True
+                    self.currentX = player.rect.right 
+                    
+        if player.onLeft and (player.rect.left < self.currentX or player.direction.x >= 0):
+            player.onLeft = False
+        if player.onLeft and (player.rect.right > self.currentX or player.direction.x <= 0):
+            player.onRight = False
+           
     def verticalCollision(self):
         player = self.player.sprite
         player.applyGravity()

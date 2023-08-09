@@ -49,12 +49,18 @@ class Player(pygame.sprite.Sprite):
 			self.image = flippedImg
 
 		#draws image on where actual rect is (stick to ground)
-		if self.onGround:
+		if self.onGround and self.onRight:
 			self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
+		elif self.onGround and self.onLeft:
+			self.rect = self.image.get_rect(bottomleft = self.rect.bottomleft)
+		elif self.onGround:
+			self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
+		elif self.onCeiling and self.onRight:
+			self.rect = self.image.get_rect(topright = self.rect.topright)
+		elif self.onCeiling and self.onLeft:
+			self.rect = self.image.get_rect(topleft = self.rect.topleft)
 		elif self.onCeiling:
 			self.rect = self.image.get_rect(midtop = self.rect.midtop)
-		else:
-			self.rect = self.image.get_rect(center = self.rect.center)
 		
 	def get_input(self):
 		keys = pygame.key.get_pressed()
