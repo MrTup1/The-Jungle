@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="240" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="1">
+ <editorsettings>
+  <export target="../0/level_0.csv" format="csv"/>
+ </editorsettings>
  <tileset firstgid="1" source="../tilesets/terrain_tileset.tsx"/>
  <tileset firstgid="1105" source="../tilesets/coins.tsx"/>
  <tileset firstgid="4810" source="../tilesets/palms.tsx"/>

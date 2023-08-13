@@ -1,4 +1,5 @@
 from os import walk
+from csv import reader
 import pygame
 
 def importFolder(path):
@@ -11,3 +12,12 @@ def importFolder(path):
           surfaceList.append(imageSurf) 
 
     return surfaceList
+
+def import_csv_layout(path):
+   terrainMap = []
+   with open(path) as map:
+      level = reader(map, delimiter= ',')
+      for row in level:
+         terrainMap.append(list(row))
+   return terrainMap
+

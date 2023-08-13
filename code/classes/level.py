@@ -1,8 +1,10 @@
 import pygame
 import time
 from settings import *
+from game_data import *
 from classes.tile import Tile
 from classes.player import Player
+from functions.support import *
 
 class Level:
     def __init__(self, levelData, surface):
@@ -11,6 +13,24 @@ class Level:
         self.worldScroll = 0
         self.currentX = 0
 
+        #importing terrain from CSV files
+        terrainLayout = import_csv_layout(levelData['terrain'])
+        self.terrainSprites = self.create_tile_group(terrainLayout, 'terrain')
+
+    def create_tile_group(self, layout, type):
+        spriteGroup = pygame.sprite.Group()
+        
+        for row_index, row in enumerate(layout):
+            for column_index, value in enumerate(row):
+                if value != '-1':
+                    x = column_index * tileSize
+                    y = row_index * tileSize
+
+                    if type == 'terrain':
+                        sprite = Tile(x, y, tileSize)
+                        spriteGroup.add(sprite)
+        return spriteGroup
+    
     def setupLevel(self):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
@@ -95,3 +115,9 @@ class Level:
         self.horizontalCollision()
         self.verticalCollision()
         self.player.draw(self.displaySurface)
+
+    #part two
+    def run(self):
+        self.terrainSprites.draw(self.displaySurface)
+        self.terrainSprites.update(self.worldScroll)
+    
