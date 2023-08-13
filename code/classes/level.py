@@ -84,6 +84,7 @@ class Level:
             player.onGround = False
         if player.onCeiling and player.direction.y > 0:
             player.onCeiling = False
+            
     def draw(self):
         self.tiles.update(self.worldScroll)
         self.tiles.draw(self.displaySurface)

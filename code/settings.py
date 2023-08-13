@@ -29,10 +29,9 @@ RED = (255, 0, 0)
 GRAVITY = 0.8	
 MAX_PLATFORMS = 5
 SCROLL_THRESH = 200
-tileSize = 64
 
 screenWidth = 1000
-screenHeight = len(levelMap) * tileSize
+screenHeight = tileSize * verticl_tile_number
 
 
 
