@@ -2,7 +2,7 @@ import pygame
 import time
 from settings import *
 from game_data import *
-from classes.tile import Tile
+from classes.tile import Tile, StaticTile
 from classes.player import Player
 from functions.support import *
 
@@ -26,8 +26,10 @@ class Level:
                     x = column_index * tileSize
                     y = row_index * tileSize
 
-                    if type == 'terrain':
-                        sprite = Tile(x, y, tileSize)
+                    if type == 'terrain': 
+                        terrain_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
+                        tileSurface = terrain_tile_list[int(value)]
+                        sprite = StaticTile(x, y, tileSize, tileSurface)
                         spriteGroup.add(sprite)
         return spriteGroup
     
@@ -119,5 +121,5 @@ class Level:
     #part two
     def run(self):
         self.terrainSprites.draw(self.displaySurface)
-        self.terrainSprites.update(self.worldScroll)
+        self.terrainSprites.update(-8)
     
