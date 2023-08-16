@@ -13,9 +13,15 @@ class Level:
         self.worldScroll = 0
         self.currentX = 0
 
+        #importing background grass
+        leaveLayout = import_csv_layout(levelData['leaves'])
+        self.leaveSprites = self.create_tile_group(leaveLayout, 'leaves')
+
         #importing terrain from CSV files
         terrainLayout = import_csv_layout(levelData['terrain'])
         self.terrainSprites = self.create_tile_group(terrainLayout, 'terrain')
+
+        #import 
 
     def create_tile_group(self, layout, type):
         spriteGroup = pygame.sprite.Group()
@@ -30,7 +36,13 @@ class Level:
                         terrain_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
                         tileSurface = terrain_tile_list[int(value)]
                         sprite = StaticTile(x, y, tileSize, tileSurface)
-                        spriteGroup.add(sprite)
+
+                    if type == 'leaves':
+                        leaves_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
+                        tileSurface = leaves_tile_list[int(value)]
+                        sprite = StaticTile(x, y, tileSize, tileSurface)
+
+                    spriteGroup.add(sprite)                       
         return spriteGroup
     
     def setupLevel(self):
@@ -120,6 +132,9 @@ class Level:
 
     #part two
     def run(self):
+        self.leaveSprites.draw(self.displaySurface)
         self.terrainSprites.draw(self.displaySurface)
+
+        self.leaveSprites.update(-8)
         self.terrainSprites.update(-8)
     

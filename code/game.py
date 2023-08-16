@@ -12,7 +12,7 @@ from functions.support import *
 from game_data import *
 
 
-pygame.init()
+pygame.init() 
 
 #Creating Objects
 level = Level(level_0, screen)
