@@ -2,7 +2,7 @@ import pygame
 import time
 from settings import *
 from game_data import *
-from classes.tile import Tile, StaticTile
+from classes.tile import Tile, StaticTile, AnimatedTile
 from classes.player import Player
 from functions.support import *
 
@@ -21,7 +21,9 @@ class Level:
         terrainLayout = import_csv_layout(levelData['terrain'])
         self.terrainSprites = self.create_tile_group(terrainLayout, 'terrain')
 
-        #import 
+        #import coin
+        coinsLayout = import_csv_layout(levelData['coins'])
+        self.coinSprites = self.create_tile_group(coinsLayout, 'coins')
 
     def create_tile_group(self, layout, type):
         spriteGroup = pygame.sprite.Group()
@@ -41,6 +43,10 @@ class Level:
                         leaves_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
                         tileSurface = leaves_tile_list[int(value)]
                         sprite = StaticTile(x, y, tileSize, tileSurface)
+
+                    if type == 'coins':
+                        if value == '58': sprite = AnimatedTile(x, y, tileSize, './graphics/coins/gold')
+                        if value == '116': sprite = AnimatedTile(x, y, tileSize, './graphics/coins/silver')
 
                     spriteGroup.add(sprite)                       
         return spriteGroup
@@ -132,9 +138,16 @@ class Level:
 
     #part two
     def run(self):
+        self.leaveSprites.update(-1)
         self.leaveSprites.draw(self.displaySurface)
+
+        self.terrainSprites.update(-1)
         self.terrainSprites.draw(self.displaySurface)
 
-        self.leaveSprites.update(-8)
-        self.terrainSprites.update(-8)
+        self.coinSprites.update(-1)
+        self.coinSprites.draw(self.displaySurface)
+
+
+
+
     
