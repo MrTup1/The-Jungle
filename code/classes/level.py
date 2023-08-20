@@ -2,7 +2,7 @@ import pygame
 import time
 from settings import *
 from game_data import *
-from classes.tile import Tile, StaticTile, AnimatedTile
+from classes.tile import Tile, StaticTile, AnimatedTile, Coin
 from classes.player import Player
 from functions.support import *
 
@@ -37,16 +37,16 @@ class Level:
                     if type == 'terrain': 
                         terrain_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
                         tileSurface = terrain_tile_list[int(value)]
-                        sprite = StaticTile(x, y, tileSize, tileSurface)
+                        sprite = StaticTile(tileSize, x, y, tileSurface)
 
                     if type == 'leaves':
                         leaves_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
                         tileSurface = leaves_tile_list[int(value)]
-                        sprite = StaticTile(x, y, tileSize, tileSurface)
+                        sprite = StaticTile(tileSize, x, y, tileSurface)
 
                     if type == 'coins':
-                        if value == '58': sprite = AnimatedTile(x, y, tileSize, './graphics/coins/gold')
-                        if value == '116': sprite = AnimatedTile(x, y, tileSize, './graphics/coins/silver')
+                        if value == '58': sprite = Coin(tileSize, x, y, './graphics/coins/gold')
+                        if value == '116': sprite = Coin(tileSize, x, y, './graphics/coins/silver')
 
                     spriteGroup.add(sprite)                       
         return spriteGroup

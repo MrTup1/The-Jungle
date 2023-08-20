@@ -3,7 +3,7 @@ from settings import *
 from functions.support import *
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, x, y, size):
+    def __init__(self, size, x, y):
       super().__init__()
       self.image = pygame.Surface((size, size))
       self.image.fill('GREEN')
@@ -37,6 +37,11 @@ class AnimatedTile(Tile):
        self.rect.x += scroll
        self.animate()
        
-
+class Coin(AnimatedTile):
+   def __init__(self, size, x, y, path):
+      super().__init__(size, x, y, path)
+      centerX = x + tileSize // 2
+      centerY = y + tileSize // 2
+      self.rect = self.image.get_rect(center = (centerX, centerY))
 
                               
