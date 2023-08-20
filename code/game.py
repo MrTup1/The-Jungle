@@ -29,7 +29,7 @@ while run == True:
 		if event.type == pygame.QUIT:
 			run = False
 			
-	screen.fill('black')
+	screen.fill('GREEN')
 	level.run()
 
 	#update display window

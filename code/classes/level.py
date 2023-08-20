@@ -163,12 +163,13 @@ class Level:
 
         self.terrainSprites.update(self.worldScroll)
         self.terrainSprites.draw(self.displaySurface)
+        
+        self.fg_palm_sprites.update(self.worldScroll)
+        self.fg_palm_sprites.draw(self.displaySurface)
 
         self.coinSprites.update(self.worldScroll)
         self.coinSprites.draw(self.displaySurface)
 
-        self.fg_palm_sprites.update(self.worldScroll)
-        self.fg_palm_sprites.draw(self.displaySurface)
 
 
 
