@@ -2,7 +2,7 @@ import pygame
 import time
 from settings import *
 from game_data import *
-from classes.tile import Tile, StaticTile, AnimatedTile, Coin
+from classes.tile import Tile, StaticTile, AnimatedTile, Coin, Palm
 from classes.player import Player
 from functions.support import *
 
@@ -10,7 +10,7 @@ class Level:
     def __init__(self, levelData, surface):
         self.displaySurface = surface
         self.Map = levelData
-        self.worldScroll = 0
+        self.worldScroll = -1
         self.currentX = 0
 
         #importing background grass
@@ -24,6 +24,13 @@ class Level:
         #import coin
         coinsLayout = import_csv_layout(levelData['coins'])
         self.coinSprites = self.create_tile_group(coinsLayout, 'coins')
+
+        #foreground palms
+        fg_palm_layout = import_csv_layout(levelData['fg palms'])
+        self.fg_palm_sprites = self.create_tile_group(fg_palm_layout, 'fg palms')
+
+        bg_palm_layout = import_csv_layout(levelData['bg palms'])
+        self.bg_palm_sprites = self.create_tile_group(bg_palm_layout, 'bg palms')
 
     def create_tile_group(self, layout, type):
         spriteGroup = pygame.sprite.Group()
@@ -47,6 +54,16 @@ class Level:
                     if type == 'coins':
                         if value == '58': sprite = Coin(tileSize, x, y, './graphics/coins/gold')
                         if value == '116': sprite = Coin(tileSize, x, y, './graphics/coins/silver')
+
+                    if type == 'fg palms':
+                        if value == "0":
+                            sprite = Palm(tileSize, x, y, './graphics/terrain/palm_small', 85)
+                        if value == "1": 
+                            sprite = Palm(tileSize, x, y, './graphics/terrain/palm_large', 120)
+
+                    if type == 'bg palms':
+                        sprite = Palm(tileSize, x, y, './graphics/terrain/palm_bg', 110)
+
 
                     spriteGroup.add(sprite)                       
         return spriteGroup
@@ -138,14 +155,20 @@ class Level:
 
     #part two
     def run(self):
-        self.leaveSprites.update(-1)
+        self.bg_palm_sprites.update(self.worldScroll)
+        self.bg_palm_sprites.draw(self.displaySurface)
+
+        self.leaveSprites.update(self.worldScroll)
         self.leaveSprites.draw(self.displaySurface)
 
-        self.terrainSprites.update(-1)
+        self.terrainSprites.update(self.worldScroll)
         self.terrainSprites.draw(self.displaySurface)
 
-        self.coinSprites.update(-1)
+        self.coinSprites.update(self.worldScroll)
         self.coinSprites.draw(self.displaySurface)
+
+        self.fg_palm_sprites.update(self.worldScroll)
+        self.fg_palm_sprites.draw(self.displaySurface)
 
 
 
