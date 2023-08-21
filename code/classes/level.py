@@ -48,7 +48,8 @@ class Level:
 
 
         self.background = Background()
-
+        levelWidth = len(terrainLayout[0])  * tileSize
+        self.water = Water(screenHeight - 25, levelWidth)
 
 
     def create_tile_group(self, layout, type):
@@ -210,6 +211,8 @@ class Level:
         self.leaveSprites.update(self.worldScroll)
         self.leaveSprites.draw(self.displaySurface)
 
+        self.water.draw(self.displaySurface, self.worldScroll)
+
         self.terrainSprites.update(self.worldScroll)
         self.terrainSprites.draw(self.displaySurface)
         
@@ -226,6 +229,9 @@ class Level:
         
         self.goal.update(self.worldScroll)
         self.goal.draw(self.displaySurface)
+
+
+
 
 
 

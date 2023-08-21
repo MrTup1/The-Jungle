@@ -50,3 +50,20 @@ class Palm(AnimatedTile):
       offset_y = y - offset
       self.rect.topleft = (x, offset_y)
       
+class Water:
+  def __init__(self, top, levelWidth):
+     waterStart = -screenWidth
+     waterTileWidth = 192
+     tile_x_amount = int((levelWidth + screenWidth) / waterTileWidth)
+     self.waterSprites = pygame.sprite.Group()
+
+     for tile in range(tile_x_amount):
+        x = tile * waterTileWidth + waterStart
+        y = top
+        sprite = AnimatedTile(waterTileWidth, x, y, './graphics/decoration/water')
+        self.waterSprites.add(sprite)
+        
+  def draw(self, surface, scroll):
+     self.waterSprites.update(scroll)
+     self.waterSprites.draw(surface)
+                              
