@@ -2,7 +2,7 @@ import math
 import pygame
 
 #game variables
-verticl_tile_number = 43
+verticl_tile_number = 44
 tileSize = 16
 scroll = 8
 bgScroll = 0
@@ -32,7 +32,6 @@ SCROLL_THRESH = 200
 
 screenWidth = 1000
 screenHeight = tileSize * verticl_tile_number
-
 
 
 screen = pygame.display.set_mode((screenWidth, screenHeight), pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.SCALED, vsync=1)

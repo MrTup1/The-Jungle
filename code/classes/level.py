@@ -5,6 +5,7 @@ from game_data import *
 from classes.tile import Tile, StaticTile, AnimatedTile, Coin, Palm
 from classes.player import Player
 from functions.support import *
+from classes.opossum import Opossum
 
 class Level:
     def __init__(self, levelData, surface):
@@ -12,6 +13,11 @@ class Level:
         self.Map = levelData
         self.worldScroll = -1
         self.currentX = 0
+        
+        playerLayout = import_csv_layout(levelData['player'])
+        self.player = pygame.sprite.GroupSingle()
+        self.goal = pygame.sprite.GroupSingle()
+        self.playerSetup(playerLayout)
 
         #importing background grass
         leaveLayout = import_csv_layout(levelData['leaves'])
@@ -31,6 +37,14 @@ class Level:
 
         bg_palm_layout = import_csv_layout(levelData['bg palms'])
         self.bg_palm_sprites = self.create_tile_group(bg_palm_layout, 'bg palms')
+
+        opossumLayout = import_csv_layout(levelData['opossum'])
+        self.opossumSprites = self.create_tile_group(opossumLayout, 'opossum')
+
+        constraintLayout = import_csv_layout(levelData['constraint'])
+        self.constraintSprites = self.create_tile_group(constraintLayout, 'constraint')
+
+
 
     def create_tile_group(self, layout, type):
         spriteGroup = pygame.sprite.Group()
@@ -64,10 +78,27 @@ class Level:
                     if type == 'bg palms':
                         sprite = Palm(tileSize, x, y, './graphics/terrain/palm_bg', 110)
 
+                    if type == 'opossum':
+                        sprite = Opossum(tileSize, x, y)
+
+                    if type == 'constraint':
+                        sprite = Tile(tileSize, x, y)
 
                     spriteGroup.add(sprite)                       
         return spriteGroup
-    
+
+    def playerSetup(self, layout):
+        for row_index, row in enumerate(layout):
+            for column_index, value in enumerate(row):
+                x = column_index * tileSize
+                y = row_index * tileSize
+                if value == '0':
+                    print('player here')
+                if value == '1':
+                    hatSurface = pygame.image.load('./graphics/character/hat.png')
+                    sprite = StaticTile(tileSize, x, y, hatSurface)
+                    self.goal.add(sprite)
+
     def setupLevel(self):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
@@ -154,6 +185,12 @@ class Level:
         self.player.draw(self.displaySurface)
 
     #part two
+
+    def opossumCollision(self):
+        for opossum in self.opossumSprites.sprites():
+            if pygame.sprite.spritecollide(opossum, self.constraintSprites, False):
+                opossum.reverse()
+
     def run(self):
         self.bg_palm_sprites.update(self.worldScroll)
         self.bg_palm_sprites.draw(self.displaySurface)
@@ -167,8 +204,16 @@ class Level:
         self.fg_palm_sprites.update(self.worldScroll)
         self.fg_palm_sprites.draw(self.displaySurface)
 
+        self.opossumSprites.update(self.worldScroll)
+        self.opossumCollision()
+        self.constraintSprites.update(self.worldScroll)
+        self.opossumSprites.draw(self.displaySurface)
+
         self.coinSprites.update(self.worldScroll)
         self.coinSprites.draw(self.displaySurface)
+        
+        self.goal.update(self.worldScroll)
+        self.goal.draw(self.displaySurface)
 
 
 
