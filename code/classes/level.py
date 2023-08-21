@@ -2,16 +2,18 @@ import pygame
 import time
 from settings import *
 from game_data import *
-from classes.tile import Tile, StaticTile, AnimatedTile, Coin, Palm
+from classes.tile import Tile, StaticTile, AnimatedTile, Coin, Palm, Water
 from classes.player import Player
 from functions.support import *
 from classes.opossum import Opossum
+from functions.background import Background
 
 class Level:
     def __init__(self, levelData, surface):
         self.displaySurface = surface
         self.Map = levelData
         self.worldScroll = -1
+        self.bgScroll = bgScroll
         self.currentX = 0
         
         playerLayout = import_csv_layout(levelData['player'])
@@ -19,7 +21,7 @@ class Level:
         self.goal = pygame.sprite.GroupSingle()
         self.playerSetup(playerLayout)
 
-        #importing background grass
+        #importing background leaves
         leaveLayout = import_csv_layout(levelData['leaves'])
         self.leaveSprites = self.create_tile_group(leaveLayout, 'leaves')
 
@@ -43,6 +45,9 @@ class Level:
 
         constraintLayout = import_csv_layout(levelData['constraint'])
         self.constraintSprites = self.create_tile_group(constraintLayout, 'constraint')
+
+
+        self.background = Background()
 
 
 
@@ -191,7 +196,14 @@ class Level:
             if pygame.sprite.spritecollide(opossum, self.constraintSprites, False):
                 opossum.reverse()
 
+    def getWorldScroll(self):
+        self.bgScroll += self.worldScroll 
+
+        return self.bgScroll
+
     def run(self):
+        self.background.draw(self.displaySurface, self.getWorldScroll())
+
         self.bg_palm_sprites.update(self.worldScroll)
         self.bg_palm_sprites.draw(self.displaySurface)
 
@@ -214,6 +226,8 @@ class Level:
         
         self.goal.update(self.worldScroll)
         self.goal.draw(self.displaySurface)
+
+
 
 
 
