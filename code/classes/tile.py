@@ -1,6 +1,6 @@
 import pygame 
 from settings import *
-from functions.support import *
+from functions.support import * 
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, size, x, y):

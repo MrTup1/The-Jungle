@@ -6,6 +6,7 @@ from classes.tile import Tile, StaticTile, AnimatedTile, Coin, Palm, Water
 from classes.player import Player
 from functions.support import *
 from classes.opossum import Opossum
+from classes.camera import CameraGroup
 from functions.background import Background
 
 class Level:
@@ -19,6 +20,7 @@ class Level:
         playerLayout = import_csv_layout(levelData['player'])
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
+        self.cameraGroup = CameraGroup()
         self.playerSetup(playerLayout)
 
         #importing background leaves
@@ -77,9 +79,9 @@ class Level:
 
                     if type == 'fg palms':
                         if value == "0":
-                            sprite = Palm(tileSize, x, y, './graphics/terrain/palm_small', 85)
+                            sprite = Palm(64, x, y, './graphics/terrain/palm_small', 85)
                         if value == "1": 
-                            sprite = Palm(tileSize, x, y, './graphics/terrain/palm_large', 120)
+                            sprite = Palm(64, x, y, './graphics/terrain/palm_large', 120)
 
                     if type == 'bg palms':
                         sprite = Palm(tileSize, x, y, './graphics/terrain/palm_bg', 110)
@@ -178,6 +180,9 @@ class Level:
 
         return self.bgScroll
 
+    def getCamera(self):
+        return self.cameraGroup
+    
     def run(self):
         self.background.draw(self.displaySurface, self.getWorldScroll())
 
@@ -204,10 +209,11 @@ class Level:
         self.coinSprites.draw(self.displaySurface)
         
         self.player.update()
+        self.player.draw(self.displaySurface)
+
         self.horizontalCollision()
         self.verticalCollision()
         self.scroll_x()
-        self.player.draw(self.displaySurface)
         self.goal.update(self.worldScroll)
         self.goal.draw(self.displaySurface)
 

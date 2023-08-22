@@ -2,7 +2,7 @@ import math
 import pygame
 
 #game variables
-vertical_tile_number = 43
+vertical_tile_number = 44
 tileSize = 16
 scroll = 8
 bgScroll = 0
