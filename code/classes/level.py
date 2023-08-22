@@ -112,15 +112,15 @@ class Level:
         direction_x = player.direction.x
 
         if player_x <= SCROLL_THRESH and direction_x == -1:
-            self.worldScroll = 8
+            self.worldScroll = 4
             player.speed = 0
 
         elif player_x >= screenWidth - SCROLL_THRESH and direction_x == 1:
-            self.worldScroll = -8
+            self.worldScroll = -4
             player.speed = 0
         else:
             self.worldScroll = 0
-            player.speed = 8
+            player.speed = 4
 
         return (self.worldScroll)
 

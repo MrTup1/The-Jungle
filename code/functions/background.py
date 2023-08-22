@@ -21,4 +21,4 @@ class Background:
       self.speed = 1
       for i in self.bgImages:
         surface.blit(i, ((j * self.bgwidth) + bgScroll * self.speed, 0))
-        self.speed += 0.1
+        self.speed += 0.05
