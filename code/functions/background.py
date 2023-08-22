@@ -17,8 +17,8 @@ class Background:
         self.bgImages.append(bgImage)
   
   def draw(self, surface, bgScroll):
-    for j in range(100):
-      self.speed = 1    
+    for j in range(-2, 100):
+      self.speed = 1
       for i in self.bgImages:
         surface.blit(i, ((j * self.bgwidth) + bgScroll * self.speed, 0))
-        self.speed += 0.4
+        self.speed += 0.1

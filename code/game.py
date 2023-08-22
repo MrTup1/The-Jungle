@@ -17,8 +17,6 @@ pygame.init()
 #Creating Objects
 level = Level(level_0, screen)
 
-level.setupLevel()
-
 #game loop
 run = True
 

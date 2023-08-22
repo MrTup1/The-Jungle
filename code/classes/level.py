@@ -12,7 +12,7 @@ class Level:
     def __init__(self, levelData, surface):
         self.displaySurface = surface
         self.Map = levelData
-        self.worldScroll = -1
+        self.worldScroll = 0
         self.bgScroll = bgScroll
         self.currentX = 0
         
@@ -99,27 +99,12 @@ class Level:
                 x = column_index * tileSize
                 y = row_index * tileSize
                 if value == '0':
-                    print('player here')
+                    sprite = Player((x,y))
+                    self.player.add(sprite)
                 if value == '1':
                     hatSurface = pygame.image.load('./graphics/character/hat.png')
                     sprite = StaticTile(tileSize, x, y, hatSurface)
                     self.goal.add(sprite)
-
-    def setupLevel(self):
-        self.tiles = pygame.sprite.Group()
-        self.player = pygame.sprite.GroupSingle()
-        
-        for row_index, row in enumerate(self.Map):
-            for column_index, column in enumerate(row):
-                x = column_index * tileSize
-                y = row_index * tileSize
-
-                if (column == "P"):
-                    player_sprite = Player((x,y))
-                    self.player.add(player_sprite)
-                if (column == "X"):
-                    tile = Tile(x, y, tileSize)
-                    self.tiles.add(tile)
     
     def scroll_x(self):       
         player = self.player.sprite
@@ -142,8 +127,9 @@ class Level:
     def horizontalCollision(self):
         player = self.player.sprite
         player.rect.x += player.direction.x * player.speed
+        collidableSprites = self.terrainSprites.sprites() + self.fg_palm_sprites.sprites()
 
-        for sprite in self.tiles.sprites():
+        for sprite in collidableSprites:
             if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
@@ -162,8 +148,9 @@ class Level:
     def verticalCollision(self):
         player = self.player.sprite
         player.applyGravity()
+        collidableSprites = self.terrainSprites.sprites() + self.fg_palm_sprites.sprites()
 
-        for sprite in self.tiles.sprites():
+        for sprite in collidableSprites:
             if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0:
                     player.rect.bottom = sprite.rect.top
@@ -178,17 +165,6 @@ class Level:
             player.onGround = False
         if player.onCeiling and player.direction.y > 0:
             player.onCeiling = False
-            
-    def draw(self):
-        self.tiles.update(self.worldScroll)
-        self.tiles.draw(self.displaySurface)
-        self.scroll_x()
-        
-        #player
-        self.player.update()
-        self.horizontalCollision()
-        self.verticalCollision()
-        self.player.draw(self.displaySurface)
 
     #part two
 
@@ -227,8 +203,15 @@ class Level:
         self.coinSprites.update(self.worldScroll)
         self.coinSprites.draw(self.displaySurface)
         
+        self.player.update()
+        self.horizontalCollision()
+        self.verticalCollision()
+        self.scroll_x()
+        self.player.draw(self.displaySurface)
         self.goal.update(self.worldScroll)
         self.goal.draw(self.displaySurface)
+
+
 
 
 
