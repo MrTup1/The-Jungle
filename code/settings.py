@@ -2,7 +2,7 @@ import math
 import pygame
 
 #game variables
-vertical_tile_number = 44
+vertical_tile_number = 22
 tileSize = 16
 scroll = 8
 bgScroll = 0
@@ -30,7 +30,7 @@ GRAVITY = 0.8
 MAX_PLATFORMS = 5
 SCROLL_THRESH = 200
 
-screenWidth = 1000
+screenWidth = 500
 screenHeight = tileSize * vertical_tile_number
 
 

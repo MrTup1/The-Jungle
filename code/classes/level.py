@@ -21,9 +21,11 @@ class Level:
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
         self.cameraGroup = CameraGroup()
-        self.playerSetup(playerLayout)
 
         #importing background leaves
+        constraintLayout = import_csv_layout(levelData['constraint'])
+        self.constraintSprites = self.create_tile_group(constraintLayout, 'constraint')
+
         leaveLayout = import_csv_layout(levelData['leaves'])
         self.leaveSprites = self.create_tile_group(leaveLayout, 'leaves')
 
@@ -45,13 +47,11 @@ class Level:
         opossumLayout = import_csv_layout(levelData['opossum'])
         self.opossumSprites = self.create_tile_group(opossumLayout, 'opossum')
 
-        constraintLayout = import_csv_layout(levelData['constraint'])
-        self.constraintSprites = self.create_tile_group(constraintLayout, 'constraint')
+        self.playerSetup(playerLayout)
 
 
         self.background = Background()
         levelWidth = len(terrainLayout[0])  * tileSize
-        self.water = Water(screenHeight - 25, levelWidth, self.cameraGroup)
 
 
     def create_tile_group(self, layout, type):
@@ -113,7 +113,7 @@ class Level:
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
-        if player_x <= SCROLL_THRESH and direction_x == -1:
+        """if player_x <= SCROLL_THRESH and direction_x == -1:
             self.worldScroll = 4
             player.speed = 0
 
@@ -122,7 +122,7 @@ class Level:
             player.speed = 0
         else:
             self.worldScroll = 0
-            player.speed = 4
+            player.speed = 4"""
 
         return (self.worldScroll)
 
@@ -180,36 +180,14 @@ class Level:
 
         return self.bgScroll
 
-    def getCamera(self):
-        return self.cameraGroup
     
     def run(self):
         self.background.draw(self.displaySurface, self.getWorldScroll())
 
-        """self.bg_palm_sprites.update(self.worldScroll)
-        self.bg_palm_sprites.draw(self.displaySurface)
-
-        self.leaveSprites.update(self.worldScroll)
-        self.leaveSprites.draw(self.displaySurface)
-
-        self.water.draw(self.displaySurface, self.worldScroll)
-
-        self.terrainSprites.update(self.worldScroll)
-        self.terrainSprites.draw(self.displaySurface)
-        
-        self.fg_palm_sprites.update(self.worldScroll)
-        self.fg_palm_sprites.draw(self.displaySurface)
-
-        self.opossumSprites.update(self.worldScroll)
         self.opossumCollision()
-        self.constraintSprites.update(self.worldScroll)
-        self.opossumSprites.draw(self.displaySurface)
-
-        self.coinSprites.update(self.worldScroll)
-        self.coinSprites.draw(self.displaySurface)"""
 
         self.cameraGroup.update()
-        self.cameraGroup.customDraw()
+        self.cameraGroup.customDraw(self.player)
 
         self.horizontalCollision()
         self.verticalCollision()
