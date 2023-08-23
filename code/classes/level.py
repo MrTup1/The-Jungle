@@ -48,9 +48,6 @@ class Level:
         self.opossumSprites = self.create_tile_group(opossumLayout, 'opossum')
 
         self.playerSetup(playerLayout)
-
-
-        self.background = Background()
         levelWidth = len(terrainLayout[0])  * tileSize
 
 
@@ -113,17 +110,6 @@ class Level:
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
-        """if player_x <= SCROLL_THRESH and direction_x == -1:
-            self.worldScroll = 4
-            player.speed = 0
-
-        elif player_x >= screenWidth - SCROLL_THRESH and direction_x == 1:
-            self.worldScroll = -4
-            player.speed = 0
-        else:
-            self.worldScroll = 0
-            player.speed = 4"""
-
         return (self.worldScroll)
 
     def horizontalCollision(self):
@@ -182,8 +168,6 @@ class Level:
 
     
     def run(self):
-        self.background.draw(self.displaySurface, self.getWorldScroll())
-
         self.opossumCollision()
 
         self.cameraGroup.update()
