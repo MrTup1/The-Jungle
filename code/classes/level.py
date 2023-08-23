@@ -101,7 +101,7 @@ class Level:
                 x = column_index * tileSize
                 y = row_index * tileSize
                 if value == '0':
-                    sprite = Player((x,y))
+                    sprite = Player((x,y), self.cameraGroup)
                     self.player.add(sprite)
                 if value == '1':
                     hatSurface = pygame.image.load('./graphics/character/hat.png')
@@ -207,9 +207,9 @@ class Level:
 
         self.coinSprites.update(self.worldScroll)
         self.coinSprites.draw(self.displaySurface)
-        
-        self.player.update()
-        self.player.draw(self.displaySurface)
+
+        self.cameraGroup.update()
+        self.cameraGroup.customDraw()
 
         self.horizontalCollision()
         self.verticalCollision()

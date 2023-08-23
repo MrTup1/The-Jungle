@@ -4,8 +4,8 @@ from settings import *
 from functions.support import importFolder
 
 class Player(pygame.sprite.Sprite):
-	def __init__(self, pos):
-		super().__init__()
+	def __init__(self, pos, group):
+		super().__init__(group)
 		self.importCharacterAssets()
 		self.frameIndex = 0
 		self.animationSpeed = 0.15
