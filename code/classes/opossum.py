@@ -3,8 +3,8 @@ from classes.tile import AnimatedTile
 from random import randint
 
 class Opossum(AnimatedTile):
-    def __init__(self, size, x, y):
-        super().__init__(size, x, y, './graphics/opossum')
+    def __init__(self, size, x, y, group):
+        super().__init__(size, x, y, './graphics/opossum', group)
         offset = 10
         offset_y = y - offset
         self.rect.topleft = (x, offset_y)
@@ -20,8 +20,7 @@ class Opossum(AnimatedTile):
     def reverse(self):
         self.speed = self.speed * -1
         
-    def update(self, scroll):
-        self.rect.x += scroll
+    def update(self):
         self.animate()
         self.reverseImage()
         self.move()

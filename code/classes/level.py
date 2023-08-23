@@ -51,7 +51,7 @@ class Level:
 
         self.background = Background()
         levelWidth = len(terrainLayout[0])  * tileSize
-        self.water = Water(screenHeight - 25, levelWidth)
+        self.water = Water(screenHeight - 25, levelWidth, self.cameraGroup)
 
 
     def create_tile_group(self, layout, type):
@@ -66,31 +66,31 @@ class Level:
                     if type == 'terrain': 
                         terrain_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
                         tileSurface = terrain_tile_list[int(value)]
-                        sprite = StaticTile(tileSize, x, y, tileSurface)
+                        sprite = StaticTile(tileSize, x, y, tileSurface, self.cameraGroup)
 
                     if type == 'leaves':
                         leaves_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
                         tileSurface = leaves_tile_list[int(value)]
-                        sprite = StaticTile(tileSize, x, y, tileSurface)
+                        sprite = StaticTile(tileSize, x, y, tileSurface, self.cameraGroup)
 
                     if type == 'coins':
-                        if value == '58': sprite = Coin(tileSize, x, y, './graphics/coins/gold')
-                        if value == '116': sprite = Coin(tileSize, x, y, './graphics/coins/silver')
+                        if value == '58': sprite = Coin(tileSize, x, y, './graphics/coins/gold', self.cameraGroup)
+                        if value == '116': sprite = Coin(tileSize, x, y, './graphics/coins/silver', self.cameraGroup)
 
                     if type == 'fg palms':
                         if value == "0":
-                            sprite = Palm(64, x, y, './graphics/terrain/palm_small', 85)
+                            sprite = Palm(64, x, y, './graphics/terrain/palm_small', 85, self.cameraGroup)
                         if value == "1": 
-                            sprite = Palm(64, x, y, './graphics/terrain/palm_large', 120)
+                            sprite = Palm(64, x, y, './graphics/terrain/palm_large', 120, self.cameraGroup)
 
                     if type == 'bg palms':
-                        sprite = Palm(tileSize, x, y, './graphics/terrain/palm_bg', 110)
+                        sprite = Palm(tileSize, x, y, './graphics/terrain/palm_bg', 110, self.cameraGroup)
 
                     if type == 'opossum':
-                        sprite = Opossum(tileSize, x, y)
+                        sprite = Opossum(tileSize, x, y, self.cameraGroup)
 
                     if type == 'constraint':
-                        sprite = Tile(tileSize, x, y)
+                        sprite = Tile(tileSize, x, y, self.cameraGroup)
 
                     spriteGroup.add(sprite)                       
         return spriteGroup
@@ -105,7 +105,7 @@ class Level:
                     self.player.add(sprite)
                 if value == '1':
                     hatSurface = pygame.image.load('./graphics/character/hat.png')
-                    sprite = StaticTile(tileSize, x, y, hatSurface)
+                    sprite = StaticTile(tileSize, x, y, hatSurface, self.cameraGroup)
                     self.goal.add(sprite)
     
     def scroll_x(self):       
@@ -186,7 +186,7 @@ class Level:
     def run(self):
         self.background.draw(self.displaySurface, self.getWorldScroll())
 
-        self.bg_palm_sprites.update(self.worldScroll)
+        """self.bg_palm_sprites.update(self.worldScroll)
         self.bg_palm_sprites.draw(self.displaySurface)
 
         self.leaveSprites.update(self.worldScroll)
@@ -206,7 +206,7 @@ class Level:
         self.opossumSprites.draw(self.displaySurface)
 
         self.coinSprites.update(self.worldScroll)
-        self.coinSprites.draw(self.displaySurface)
+        self.coinSprites.draw(self.displaySurface)"""
 
         self.cameraGroup.update()
         self.cameraGroup.customDraw()
@@ -214,8 +214,8 @@ class Level:
         self.horizontalCollision()
         self.verticalCollision()
         self.scroll_x()
-        self.goal.update(self.worldScroll)
-        self.goal.draw(self.displaySurface)
+        """self.goal.update(self.worldScroll)
+        self.goal.draw(self.displaySurface)"""
 
 
 
