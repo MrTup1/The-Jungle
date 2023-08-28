@@ -10,15 +10,25 @@ from classes.level import Level
 from functions.background import *
 from functions.support import *
 from game_data import *
+from overworld import Overworld
 
+class Game: 
+	def __init__(self):
+		self.maxLevel = 3
+		self.overworld = Overworld(0, self.maxLevel, screen)
+		self.overworld.setupNodes()
+	
+	def run(self):
+		self.overworld.run()
 
 pygame.init() 
 
 #Creating Objects
-level = Level(level_0, screen)
+#level = Level(level_0, screen)
 
 #game loop
 run = True
+game = Game()
 
 
 while run == True:
@@ -27,8 +37,8 @@ while run == True:
 		if event.type == pygame.QUIT:
 			run = False
 			
-	screen.fill('GREEN')
-	level.run()
+	#level.run()
+	game.run()
 
 	#update display window
 	pygame.display.update()

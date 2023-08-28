@@ -30,7 +30,7 @@ GRAVITY = 0.8
 MAX_PLATFORMS = 5
 SCROLL_THRESH = 150
 
-screenWidth = 750
+screenWidth = 1000
 screenHeight = tileSize * vertical_tile_number
 
 
