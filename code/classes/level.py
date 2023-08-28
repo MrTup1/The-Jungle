@@ -33,9 +33,7 @@ class Level:
         terrainLayout = import_csv_layout(levelData['terrain'])
         self.terrainSprites = self.create_tile_group(terrainLayout, 'terrain')
 
-        #import coin
-        coinsLayout = import_csv_layout(levelData['coins'])
-        self.coinSprites = self.create_tile_group(coinsLayout, 'coins')
+
 
         #foreground palms
         fg_palm_layout = import_csv_layout(levelData['fg palms'])
@@ -46,6 +44,10 @@ class Level:
 
         opossumLayout = import_csv_layout(levelData['opossum'])
         self.opossumSprites = self.create_tile_group(opossumLayout, 'opossum')
+
+        #import coin
+        coinsLayout = import_csv_layout(levelData['coins'])
+        self.coinSprites = self.create_tile_group(coinsLayout, 'coins')
 
         self.playerSetup(playerLayout)
         levelWidth = len(terrainLayout[0])  * tileSize
@@ -87,7 +89,9 @@ class Level:
                         sprite = Opossum(tileSize, x, y, self.cameraGroup)
 
                     if type == 'constraint':
-                        sprite = Tile(tileSize, x, y, self.cameraGroup)
+                        terrain_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
+                        tileSurface = terrain_tile_list[int(value)]
+                        sprite = StaticTile(tileSize, x, y, tileSurface, self.cameraGroup)
 
                     spriteGroup.add(sprite)                       
         return spriteGroup
@@ -105,13 +109,6 @@ class Level:
                     sprite = StaticTile(tileSize, x, y, hatSurface, self.cameraGroup)
                     self.goal.add(sprite)
     
-    def scroll_x(self):       
-        player = self.player.sprite
-        player_x = player.rect.centerx
-        direction_x = player.direction.x
-
-        return (self.worldScroll)
-
     def horizontalCollision(self):
         player = self.player.sprite
         player.rect.x += player.direction.x * player.speed
@@ -161,12 +158,6 @@ class Level:
             if pygame.sprite.spritecollide(opossum, self.constraintSprites, False):
                 opossum.reverse()
 
-    def getWorldScroll(self):
-        self.bgScroll += self.worldScroll 
-
-        return self.bgScroll
-
-    
     def run(self):
         self.opossumCollision()
 
@@ -175,10 +166,6 @@ class Level:
 
         self.horizontalCollision()
         self.verticalCollision()
-        self.scroll_x()
-        """self.goal.update(self.worldScroll)
-        self.goal.draw(self.displaySurface)"""
-
 
 
 
