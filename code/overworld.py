@@ -24,6 +24,10 @@ class Overworld:
         self.displaySurface = surface
         self.maxLevel = maxLevel
         self.currentLevel = startLevel
+        self.moving = False
+
+        self.moveDirection = pygame.math.Vector2(0,0)
+        self.speed = 8
 
         self.setupNodes()
         self.setupIcon()
@@ -50,7 +54,33 @@ class Overworld:
                 pointList.append(nodeData['nodePos'])
         pygame.draw.lines(self.displaySurface, 'RED', False, pointList, 6)
 
+    def input(self):
+        keys = pygame.key.get_pressed()
+
+        if not self.moving:
+            if keys[pygame.K_RIGHT] and self.currentLevel <= self.maxLevel:
+                self.moveDirection = self.getMovementData()
+                self.currentLevel += 1
+                self.moving = True
+                print(self.moveDirection)
+            elif keys[pygame.K_LEFT] and self.currentLevel > 0:
+                self.currentLevel -= 1
+                self.moving = True
+    
+    def updateIconPosition(self):
+        self.icon.sprite.rect.center += self.moveDirection * self.speed
+
+    def getMovementData(self):
+        start = pygame.math.Vector2(self.nodes.sprites()[self.currentLevel].rect.center)
+        end = pygame.math.Vector2(self.nodes.sprites()[self.currentLevel + 1].rect.center)
+        final = (end - start).normalize()
+ 
+        return (final)
+
     def run(self):
+        self.input()
+        self.updateIconPosition()
         self.drawPaths()
         self.nodes.draw(self.displaySurface)
         self.icon.draw(self.displaySurface)
+
