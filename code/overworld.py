@@ -54,7 +54,7 @@ class Overworld:
         self.moveDirection = pygame.math.Vector2(0,0)
         self.speed = 8
 
-        self.background = OverworldBackground()
+        self.background = pygame.image.load('./graphics/overworld/plank_background.png').convert_alpha()
 
         self.setupNodes()
         self.setupIcon()
@@ -79,7 +79,7 @@ class Overworld:
         for index, nodeData in enumerate(levels.values()):
             if index <= self.maxLevel:             
                 pointList.append(nodeData['nodePos'])
-        pygame.draw.lines(self.displaySurface, '#af7765', False, pointList, 6)
+        pygame.draw.lines(self.displaySurface, '#582c35', False, pointList, 6)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -120,7 +120,7 @@ class Overworld:
         self.updateIconPosition()
         self.icon.update()
 
-        self.background.draw(self.displaySurface)
+        self.displaySurface.blit(self.background, (0,0))
         self.drawPaths()
         self.nodes.draw(self.displaySurface)
         self.nodes.update()
