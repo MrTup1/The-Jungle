@@ -39,7 +39,7 @@ while run == True:
 	#level.run()
 	screen.fill("BLACK")
 	game.run()
-	
+
 	#update display window
 	pygame.display.update()
 	clock.tick(60)
