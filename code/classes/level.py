@@ -10,12 +10,18 @@ from classes.camera import CameraGroup
 from functions.background import Background
 
 class Level:
-    def __init__(self, levelData, surface):
+    def __init__(self, currentLevel, surface, createOverworld):
         self.displaySurface = surface
-        self.Map = levelData
         self.worldScroll = 0
         self.bgScroll = bgScroll
         self.currentX = 0
+
+        #overworld
+        self.currentLevel = currentLevel
+        self.createOverworld = createOverworld
+        levelData = levels[self.currentLevel]
+        self.new_max_level = levelData['unlock']
+        
         
         playerLayout = import_csv_layout(levelData['player'])
         self.player = pygame.sprite.GroupSingle()
@@ -158,7 +164,19 @@ class Level:
             if pygame.sprite.spritecollide(opossum, self.constraintSprites, False):
                 opossum.reverse()
 
+    def checkDeath(self):
+        #if player off screen + camera offset
+        if self.player.sprite.rect.top > screenHeight + 143:
+            print("bruh")
+            self.createOverworld(self.currentLevel, 0)
+    
+    def checkWin(self):
+        if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
+            print("bruh2")
+            self.createOverworld(self.currentLevel, self.new_max_level)    
+
     def run(self):
+
         self.opossumCollision()
 
         self.cameraGroup.update()
@@ -167,8 +185,31 @@ class Level:
         self.horizontalCollision()
         self.verticalCollision()
 
+        self.checkDeath()
+        self.checkWin()
 
 
+class NewLevel:
+    def __init__(self, currentLevel, surface, createOverworld):
+        self.displaySurface = surface
+        levelData = levels[currentLevel]
+        levelContent = levelData['content']
+        print(levelData['unlock'])
+
+        self.font = pygame.font.Font(None, 40)
+        self.textSurface = self.font.render(levelContent, True, "White")
+        self.textRect = self.textSurface.get_rect(center = (screenWidth /2, screenHeight /2))
+    
+    def input(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RETURN]:
+            self.createOverworld(self.currentLevel, self.new_max_level)
+        if keys[pygame.K_ESCAPE]:
+            self.createOverworld(self.currentLevel, 0)
+
+    def run(self):
+        self.input()
+        self.displaySurface.blit(self.textSurface, self.textRect)
 
 
 

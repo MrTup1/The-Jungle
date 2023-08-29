@@ -1,35 +1,48 @@
 import pygame
 from game_data import levels
+from functions.support import * 
+from classes.tile import AnimatedTile
 
 class Node(pygame.sprite.Sprite):
-    def __init__(self, pos, status, iconSpeed):
+    def __init__(self, pos, status, iconSpeed, path):
         super().__init__()
-        self.image = pygame.Surface((100, 80))
+        self.frames = importFolder(path)
+        self.frameIndex = 0
+        self.animationSpeed = 0.15
+        self.image = self.frames[self.frameIndex]
         if status == 'available':
-            self.image.fill("GREEN")
+            self.status = 'available'
         else:
-            self.image.fill("RED")     
+            self.status = 'locked'
 
         self.rect = self.image.get_rect(center = pos)
         self.hitbox = pygame.Rect(self.rect.centerx - iconSpeed / 2, self.rect.centery - iconSpeed / 2, iconSpeed, iconSpeed)
+
+    def animate(self):
+        self.frameIndex += self.animationSpeed
+        if (self.frameIndex >= len(self.frames)):
+          self.frameIndex = 0
+        self.image = self.frames[int(self.frameIndex)]
+    def update(self):
+        self.animate()
 
 class Icon(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
         self.pos = pos
-        self.image = pygame.Surface((10,10))
-        self.image.fill('BLUE')
+        self.image = pygame.image.load('./graphics/overworld/hat.png')
         self.rect = self.image.get_rect(center = pos)
     
     def update(self):
         self.rect.center = self.pos
 
 class Overworld:
-    def __init__(self, startLevel, maxLevel, surface):
+    def __init__(self, startLevel, maxLevel, surface, createLevel):
         self.displaySurface = surface
         self.maxLevel = maxLevel
         self.currentLevel = startLevel
         self.moving = False
+        self.createLevel = createLevel
 
         self.moveDirection = pygame.math.Vector2(0,0)
         self.speed = 8
@@ -42,9 +55,9 @@ class Overworld:
 
         for index, nodeData in enumerate(levels.values()):
             if index <= self.maxLevel:             
-              nodeSprite = Node(nodeData['nodePos'], 'available', self.speed)
+              nodeSprite = Node(nodeData['nodePos'], 'available', self.speed, nodeData['nodeGraphic'])
             else: 
-              nodeSprite = Node(nodeData['nodePos'], 'locked', self.speed)
+              nodeSprite = Node(nodeData['nodePos'], 'locked', self.speed, nodeData['nodeGraphic'])
             self.nodes.add(nodeSprite)
 
     def setupIcon(self):
@@ -57,21 +70,22 @@ class Overworld:
         for index, nodeData in enumerate(levels.values()):
             if index <= self.maxLevel:             
                 pointList.append(nodeData['nodePos'])
-        pygame.draw.lines(self.displaySurface, 'RED', False, pointList, 6)
+        pygame.draw.lines(self.displaySurface, '#af7765', False, pointList, 6)
 
     def input(self):
         keys = pygame.key.get_pressed()
 
         if not self.moving:
-            if keys[pygame.K_RIGHT] and self.currentLevel <= self.maxLevel:
+            if keys[pygame.K_RIGHT] and self.currentLevel < self.maxLevel:
                 self.moveDirection = self.getMovementData(True)
                 self.currentLevel += 1
                 self.moving = True
-                print(self.moveDirection)
             elif keys[pygame.K_LEFT] and self.currentLevel > 0:
                 self.moveDirection = self.getMovementData(False)
                 self.currentLevel -= 1
                 self.moving = True
+            elif keys[pygame.K_SPACE]:
+                self.createLevel(self.currentLevel)
     
     def updateIconPosition(self):
         if self.moving and self.moveDirection:
@@ -98,5 +112,6 @@ class Overworld:
         self.icon.update()
         self.drawPaths()
         self.nodes.draw(self.displaySurface)
+        self.nodes.update()
         self.icon.draw(self.displaySurface)
 
