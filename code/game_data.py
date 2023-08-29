@@ -52,7 +52,7 @@ level_3 = {
     'opossum' : './levels/0/level_0_enemies.csv',
     'constraint' : './levels/0/level_0_constraints.csv',
     'player' : './levels/0/level_0_player.csv',
-    'nodePos':(580, 350),
+    'nodePos':(580, 325),
     'content': 'this is level 3', 
     'unlock' : 4,
     'nodeGraphic': './graphics/overworld/3'

@@ -23,3 +23,12 @@ class Background:
       for i in self.bgImages:
         surface.blit(i, ((j * self.bgwidth) - bgScroll * self.speed, 0))
         self.speed += 0.05
+
+class OverworldBackground(Background):
+    def __init__(self):
+       super().__init__()
+    
+    def draw(self, surface):
+      for i in self.bgImages:
+        surface.blit(i, (0, 0))
+        self.speed += 0.05

@@ -51,7 +51,7 @@ while run == True:
 			run = False
 			
 	#level.run()
-	screen.fill("BLACK")
+	screen.fill("WHITE")
 	game.run()
 
 	#update display window

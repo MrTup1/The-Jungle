@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
 		self.direction = pygame.math.Vector2(0,0)
 		self.speed = 4
 		self.gravity = 0.8
-		self.jumpSpeed = -15
+		self.jumpSpeed = -16
 
 	def importCharacterAssets(self):
 		characterPath = './graphics/character/'

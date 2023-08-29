@@ -2,6 +2,7 @@ import pygame
 from game_data import levels
 from functions.support import * 
 from classes.tile import AnimatedTile
+from functions.background import OverworldBackground
 
 class Node(pygame.sprite.Sprite):
     def __init__(self, pos, status, iconSpeed, path):
@@ -9,7 +10,7 @@ class Node(pygame.sprite.Sprite):
         self.frames = importFolder(path)
         self.frameIndex = 0
         self.animationSpeed = 0.15
-        self.image = self.frames[self.frameIndex]
+        self.image = pygame.transform.scale_by(self.frames[self.frameIndex], 0.5)
         if status == 'available':
             self.status = 'available'
         else:
@@ -22,15 +23,21 @@ class Node(pygame.sprite.Sprite):
         self.frameIndex += self.animationSpeed
         if (self.frameIndex >= len(self.frames)):
           self.frameIndex = 0
-        self.image = self.frames[int(self.frameIndex)]
+        self.image = pygame.transform.scale_by(self.frames[int(self.frameIndex)], 0.5)
+
     def update(self):
-        self.animate()
+        if self.status == 'available':
+            self.animate()
+        else:
+            blackSurf = self.image.copy()
+            blackSurf.fill('black', None, pygame.BLEND_RGBA_MULT)
+            self.image.blit(blackSurf, (0,0))
 
 class Icon(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
         self.pos = pos
-        self.image = pygame.image.load('./graphics/overworld/hat.png')
+        self.image = pygame.transform.scale_by(pygame.image.load('./graphics/overworld/hat.png'), 0.75).convert_alpha()
         self.rect = self.image.get_rect(center = pos)
     
     def update(self):
@@ -46,6 +53,8 @@ class Overworld:
 
         self.moveDirection = pygame.math.Vector2(0,0)
         self.speed = 8
+
+        self.background = OverworldBackground()
 
         self.setupNodes()
         self.setupIcon()
@@ -105,11 +114,13 @@ class Overworld:
 
         final = (end - start).normalize()
         return (final)
-
+    
     def run(self):
         self.input()
         self.updateIconPosition()
         self.icon.update()
+
+        self.background.draw(self.displaySurface)
         self.drawPaths()
         self.nodes.draw(self.displaySurface)
         self.nodes.update()
