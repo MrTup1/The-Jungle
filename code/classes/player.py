@@ -2,9 +2,10 @@ import pygame
 import time
 from settings import *
 from functions.support import importFolder
+from math import sin
 
 class Player(pygame.sprite.Sprite):
-	def __init__(self, pos, group):
+	def __init__(self, pos, group, changeHealth):
 		super().__init__(group)
 		self.importCharacterAssets()
 		self.frameIndex = 0
@@ -28,6 +29,11 @@ class Player(pygame.sprite.Sprite):
 		self.gravity = 0.8
 		self.jumpSpeed = -10
 
+		self.changeHealth = changeHealth
+		self.invincible = False
+		self.inivincibleDuration = 400
+		self.hurtTime = 0
+
 	def importCharacterAssets(self):
 		characterPath = './graphics/character/'
 		self.animations = {"idle" :[], "run":[], "jump":[], "fall":[]}
@@ -49,6 +55,12 @@ class Player(pygame.sprite.Sprite):
 		else:
 			flippedImg = pygame.transform.flip(image, True, False)
 			self.image = flippedImg
+
+		if self.invincible:
+			alpha = self.flicker()
+			self.image.set_alpha(alpha)
+		else:
+			self.image.set_alpha(255)
 
 		#draws image on where actual rect is (stick to ground)
 		if self.onGround and self.onRight:
@@ -97,6 +109,22 @@ class Player(pygame.sprite.Sprite):
 				self.status = "idle"
 				self.releasedJump = False
 		
+	def getDamage(self):
+		if not self.invincible:
+			self.changeHealth(-1)
+			self.invincible = True
+			self.hurtTime = pygame.time.get_ticks()
+
+	def inivincibleTime(self):
+		if self.invincible:
+			currentTime = pygame.time.get_ticks()
+			if currentTime - self.hurtTime >= self.inivincibleDuration: 
+				self.invincible = False
+
+	def flicker(self):
+		value = sin(pygame.time.get_ticks())
+		if value >= 0: return 0
+		else: return 255
 
 	def applyGravity(self):
 		self.direction.y += self.gravity
@@ -109,3 +137,5 @@ class Player(pygame.sprite.Sprite):
 		self.get_input()
 		self.getStatus()
 		self.animate()
+		self.inivincibleTime()
+		self.flicker()

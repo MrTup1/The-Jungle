@@ -10,7 +10,7 @@ from classes.camera import CameraGroup
 from functions.background import Background
 
 class Level:
-    def __init__(self, currentLevel, surface, createOverworld, updateCoins):
+    def __init__(self, currentLevel, surface, createOverworld, updateCoins, changeHealth):
         self.displaySurface = surface
         self.worldScroll = 0
         self.bgScroll = bgScroll
@@ -60,7 +60,7 @@ class Level:
         coinsLayout = import_csv_layout(levelData['coins'])
         self.coinSprites = self.create_tile_group(coinsLayout, 'coins')
 
-        self.playerSetup(playerLayout)
+        self.playerSetup(playerLayout, changeHealth)
         levelWidth = len(terrainLayout[0])  * tileSize
 
 
@@ -107,13 +107,13 @@ class Level:
                     spriteGroup.add(sprite)                       
         return spriteGroup
 
-    def playerSetup(self, layout):
+    def playerSetup(self, layout, changeHealth):
         for row_index, row in enumerate(layout):
             for column_index, value in enumerate(row):
                 x = column_index * tileSize
                 y = row_index * tileSize
                 if value == '0':
-                    sprite = Player((x,y), self.cameraGroup)
+                    sprite = Player((x,y), self.cameraGroup, changeHealth)
                     self.player.add(sprite)
                 if value == '1':
                     hatSurface = pygame.image.load('./graphics/character/hat.png')
@@ -198,6 +198,8 @@ class Level:
                     explosionSprite = ParticleEffect(opossum.rect.center, 'explosion', self.cameraGroup)
                     self.explosionSprites.add(explosionSprite)
                     opossum.kill()
+                else:
+                    self.player.sprite.getDamage()
 
     def run(self):
 

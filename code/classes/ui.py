@@ -13,7 +13,7 @@ class UI:
         self.font = pygame.font.Font('./graphics/ui/ARCADEPI.ttf', 30)
 
     def showHealth(self, current, full):
-        for i in range(full):
+        for i in range(current):
             self.displaySurface.blit(self.healthUI, (i * 20 + 10, 10))
 
     def showCoins(self, amount):
