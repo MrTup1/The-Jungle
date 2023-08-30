@@ -31,6 +31,8 @@ class Level:
         #UI
         self.updateCoins = updateCoins
 
+        self.explosionSprites = pygame.sprite.Group()
+
         #importing background leaves
         constraintLayout = import_csv_layout(levelData['constraint'])
         self.constraintSprites = self.create_tile_group(constraintLayout, 'constraint')
@@ -182,6 +184,21 @@ class Level:
             for coin in collidedCoins:
                 self.updateCoins(coin.value)
 
+    def checkOpossumCollisions(self):
+        opossumCollisions = pygame.sprite.spritecollide(self.player.sprite, self.opossumSprites, False)
+
+        if opossumCollisions:
+            for opossum in opossumCollisions:
+                opossumCenter = opossum.rect.centery
+                opossumTop = opossum.rect.top
+                playerBottom = self.player.sprite.rect.bottom
+
+                if opossumTop < playerBottom and self.player.sprite.direction.y > 0:
+                    self.player.sprite.direction.y = -10
+                    explosionSprite = ParticleEffect(opossum.rect.center, 'explosion', self.cameraGroup)
+                    self.explosionSprites.add(explosionSprite)
+                    opossum.kill()
+
     def run(self):
 
         self.opossumCollision()
@@ -195,6 +212,7 @@ class Level:
         self.checkDeath()
         self.checkWin()
         self.checkCoin()
+        self.checkOpossumCollisions()
 
 
     

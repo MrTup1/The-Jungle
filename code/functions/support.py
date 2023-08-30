@@ -38,4 +38,23 @@ def import_cut_graphics(path):
 
    return cutTiles
 
+class ParticleEffect(pygame.sprite.Sprite):
+   def __init__(self, pos, type, group):
+      super().__init__(group)
+      self.frameIndex = 0
+      self.animationSpeed = 0.5
+      if type == 'explosion':
+         self.frames = importFolder('./graphics/enemy/explosion')
+      self.image = self.frames[self.frameIndex]
+      self.rect = self.image.get_rect(center = pos)
+   
+   def animate(self):
+      self.frameIndex += self.animationSpeed
+      if self.frameIndex >= len(self.frames):
+         self.kill()
+      else:
+         self.image = self.frames[int(self.frameIndex)]
+   
+   def update(self):
+      self.animate()
 
