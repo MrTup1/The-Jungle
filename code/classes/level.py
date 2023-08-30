@@ -10,7 +10,7 @@ from classes.camera import CameraGroup
 from functions.background import Background
 
 class Level:
-    def __init__(self, currentLevel, surface, createOverworld):
+    def __init__(self, currentLevel, surface, createOverworld, updateCoins):
         self.displaySurface = surface
         self.worldScroll = 0
         self.bgScroll = bgScroll
@@ -27,6 +27,9 @@ class Level:
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
         self.cameraGroup = CameraGroup()
+
+        #UI
+        self.updateCoins = updateCoins
 
         #importing background leaves
         constraintLayout = import_csv_layout(levelData['constraint'])
@@ -79,8 +82,8 @@ class Level:
                         sprite = StaticTile(tileSize, x, y, tileSurface, self.cameraGroup)
 
                     if type == 'coins':
-                        if value == '58': sprite = Coin(tileSize, x, y, './graphics/coins/gold', self.cameraGroup)
-                        if value == '116': sprite = Coin(tileSize, x, y, './graphics/coins/silver', self.cameraGroup)
+                        if value == '58': sprite = Coin(tileSize, x, y, './graphics/coins/gold', self.cameraGroup, 5)
+                        if value == '116': sprite = Coin(tileSize, x, y, './graphics/coins/silver', self.cameraGroup, 1)
 
                     if type == 'fg palms':
                         if value == "0":
@@ -173,6 +176,12 @@ class Level:
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
             self.createOverworld(self.currentLevel, self.new_max_level)    
 
+    def checkCoin(self):
+        collidedCoins = pygame.sprite.spritecollide(self.player.sprite, self.coinSprites, True)
+        if collidedCoins:
+            for coin in collidedCoins:
+                self.updateCoins(coin.value)
+
     def run(self):
 
         self.opossumCollision()
@@ -185,34 +194,7 @@ class Level:
 
         self.checkDeath()
         self.checkWin()
-
-
-class NewLevel:
-    def __init__(self, currentLevel, surface, createOverworld):
-        self.displaySurface = surface
-        levelData = levels[currentLevel]
-        levelContent = levelData['content']
-
-        self.font = pygame.font.Font(None, 40)
-        self.textSurface = self.font.render(levelContent, True, "White")
-        self.textRect = self.textSurface.get_rect(center = (screenWidth /2, screenHeight /2))
-    
-    def input(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_RETURN]:
-            self.createOverworld(self.currentLevel, self.new_max_level)
-        if keys[pygame.K_ESCAPE]:
-            self.createOverworld(self.currentLevel, 0)
-
-    def run(self):
-        self.input()
-        self.displaySurface.blit(self.textSurface, self.textRect)
-
-
-
-
-
-
+        self.checkCoin()
 
 
     

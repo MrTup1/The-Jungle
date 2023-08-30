@@ -6,7 +6,7 @@ from settings import *
 from classes.platform import Platform
 from classes.player import Player
 from classes.tile import Tile
-from classes.level import Level, NewLevel
+from classes.level import Level
 from classes.ui import UI
 from functions.background import *
 from functions.support import *
@@ -25,7 +25,7 @@ class Game:
 		self.ui = UI(screen)
 
 	def createLevel(self, currentLevel):
-		self.level = Level(currentLevel, screen, self.createOverworld)
+		self.level = Level(currentLevel, screen, self.createOverworld, self.updateCoins)
 		self.status = 'level'
 
 	def createOverworld(self, currentLevel, newMaxLevel):
@@ -34,12 +34,15 @@ class Game:
 		self.overworld = Overworld(currentLevel, self.maxLevel, screen, self.createLevel)
 		self.status = 'overworld'
 
+	def updateCoins(self, amount):
+		self.coins += amount
+
 	def run(self):
 		if self.status == 'overworld':
 			self.overworld.run()
 		else: 
 			self.level.run()
-			self.ui.showHealth(100, 100)
+			self.ui.showHealth(5, 5)
 			self.ui.showCoins(self.coins)
 
 pygame.init() 
