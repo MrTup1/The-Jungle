@@ -9,8 +9,8 @@ class UI:
 
         #coins
         self.coin = pygame.image.load('./graphics/ui/coin.png').convert_alpha()
-        self.coinRect = self.coin.get_rect(topleft = (15, 61))
-        self.font = pygame.font.Font('./graphics/ui/ARCADEPI.ttf', 30)
+        self.coinRect = self.coin.get_rect(topleft = (15, 45))
+        self.font = pygame.font.Font('./graphics/ui/ARCADEPI.ttf', 15)
 
     def showHealth(self, current, full):
         for i in range(current):
