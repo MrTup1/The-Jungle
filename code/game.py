@@ -7,6 +7,7 @@ from classes.platform import Platform
 from classes.player import Player
 from classes.tile import Tile
 from classes.level import Level, NewLevel
+from classes.ui import UI
 from functions.background import *
 from functions.support import *
 from game_data import *
@@ -17,6 +18,11 @@ class Game:
 		self.maxLevel = 0
 		self.overworld = Overworld(0, self.maxLevel, screen, self.createLevel)
 		self.status = 'overworld'
+		self.maxHealth = 5
+		self.currentHealth = 5
+		self.coins = 0
+
+		self.ui = UI(screen)
 
 	def createLevel(self, currentLevel):
 		self.level = Level(currentLevel, screen, self.createOverworld)
@@ -33,6 +39,8 @@ class Game:
 			self.overworld.run()
 		else: 
 			self.level.run()
+			self.ui.showHealth(100, 100)
+			self.ui.showCoins(self.coins)
 
 pygame.init() 
 
