@@ -36,9 +36,6 @@ class Game:
 
 pygame.init() 
 
-#Creating Objects
-#level = Level(level_0, screen)
-
 #game loop
 run = True
 game = Game()

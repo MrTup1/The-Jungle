@@ -20,6 +20,7 @@ class Player(pygame.sprite.Sprite):
 		self.onLeft = False
 		self.onRight = False
 		self.time = 0
+		self.releasedJump = False
 
 		#movement
 		self.direction = pygame.math.Vector2(0,0)
@@ -76,11 +77,12 @@ class Player(pygame.sprite.Sprite):
 
 		if keys[pygame.K_z]:
 			#if (self.direction.y == 0) and self.onCeiling == False:
-				self.time += 1
-				if self.time < 13:
+			self.time += 1
+			if self.time < 13 and self.onCeiling == False and self.releasedJump == False:
 					self.jump()
 		elif keys[pygame.K_z] == False:
 				self.time = 0
+				self.releasedJump = True
 
 	def getStatus(self):
 		if self.direction.y < 0:
@@ -90,8 +92,10 @@ class Player(pygame.sprite.Sprite):
 		else:
 			if self.direction.x != 0:
 				self.status = "run"
+				self.releasedJump = False
 			else:
 				self.status = "idle"
+				self.releasedJump = False
 		
 
 	def applyGravity(self):
