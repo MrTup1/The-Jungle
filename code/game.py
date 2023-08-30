@@ -14,8 +14,8 @@ from overworld import Overworld
 
 class Game: 
 	def __init__(self):
-		self.maxLevel = 2
-		self.overworld = Overworld(1, self.maxLevel, screen, self.createLevel)
+		self.maxLevel = 0
+		self.overworld = Overworld(0, self.maxLevel, screen, self.createLevel)
 		self.status = 'overworld'
 
 	def createLevel(self, currentLevel):

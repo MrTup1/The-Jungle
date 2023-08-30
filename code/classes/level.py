@@ -167,12 +167,10 @@ class Level:
     def checkDeath(self):
         #if player off screen + camera offset
         if self.player.sprite.rect.top > screenHeight + 143:
-            print("bruh")
             self.createOverworld(self.currentLevel, 0)
     
     def checkWin(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
-            print("bruh2")
             self.createOverworld(self.currentLevel, self.new_max_level)    
 
     def run(self):
@@ -194,7 +192,6 @@ class NewLevel:
         self.displaySurface = surface
         levelData = levels[currentLevel]
         levelContent = levelData['content']
-        print(levelData['unlock'])
 
         self.font = pygame.font.Font(None, 40)
         self.textSurface = self.font.render(levelContent, True, "White")

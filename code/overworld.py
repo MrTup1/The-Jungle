@@ -75,11 +75,12 @@ class Overworld:
         self.icon.add(iconSprite)
 
     def drawPaths(self):
-        pointList = []
-        for index, nodeData in enumerate(levels.values()):
-            if index <= self.maxLevel:             
-                pointList.append(nodeData['nodePos'])
-        pygame.draw.lines(self.displaySurface, '#582c35', False, pointList, 6)
+        if self.maxLevel > 0:
+            pointList = []
+            for index, nodeData in enumerate(levels.values()):
+                if index <= self.maxLevel:             
+                    pointList.append(nodeData['nodePos'])
+            pygame.draw.lines(self.displaySurface, '#582c35', False, pointList, 6)
 
     def input(self):
         keys = pygame.key.get_pressed()
