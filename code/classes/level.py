@@ -15,6 +15,7 @@ class Level:
         self.worldScroll = 0
         self.bgScroll = bgScroll
         self.currentX = 0
+        self.changehealth = changeHealth
 
         #overworld
         self.currentLevel = currentLevel
@@ -152,10 +153,12 @@ class Level:
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
                     player.onGround = True
+                    player.releasedJump = False
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
                     player.onCeiling = True
+                    player.releasedJump = False
 
         if player.onGround and player.direction.y < 0 or player.direction.y > 1:
             player.onGround = False
@@ -172,10 +175,12 @@ class Level:
     def checkDeath(self):
         #if player off screen + camera offset
         if self.player.sprite.rect.top > screenHeight + 143:
+            self.changehealth(-1)
             self.createOverworld(self.currentLevel, 0)
     
     def checkWin(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
+            self.changehealth(1)
             self.createOverworld(self.currentLevel, self.new_max_level)    
 
     def checkCoin(self):

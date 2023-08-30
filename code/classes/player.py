@@ -104,10 +104,8 @@ class Player(pygame.sprite.Sprite):
 		else:
 			if self.direction.x != 0:
 				self.status = "run"
-				self.releasedJump = False
 			else:
 				self.status = "idle"
-				self.releasedJump = False
 		
 	def getDamage(self):
 		if not self.invincible:
