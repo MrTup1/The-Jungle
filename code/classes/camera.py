@@ -9,7 +9,7 @@ class CameraGroup(pygame.sprite.Group):
         self.displaySurface = pygame.display.get_surface()
         self.offset = pygame.math.Vector2(0, 143)
 
-        self.cameraBorders = {'left': 150, 'right': 150, 'top': 50, 'bottom': 50}
+        self.cameraBorders = {'left': 400, 'right': 400, 'top': 50, 'bottom': 50}
         l = self.cameraBorders['left']
         t = self.cameraBorders['top']
         w = screenWidth - (self.cameraBorders['left'] + self.cameraBorders['right'])

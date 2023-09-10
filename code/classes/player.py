@@ -22,6 +22,7 @@ class Player(pygame.sprite.Sprite):
 		self.onRight = False
 		self.time = 0
 		self.releasedJump = False
+		self.dashed = False
 
 		#movement
 		self.direction = pygame.math.Vector2(0,0)
@@ -95,6 +96,13 @@ class Player(pygame.sprite.Sprite):
 		elif keys[pygame.K_z] == False:
 				self.time = 0
 				self.releasedJump = True
+		
+		if keys[pygame.K_c] and self.dashed == False:
+			if self.facing == "left":
+				self.dash(-1)
+			elif self.facing == "right":
+				self.dash(1)
+			self.dashed == True
 
 	def getStatus(self):
 		if self.direction.y < 0:
@@ -130,6 +138,10 @@ class Player(pygame.sprite.Sprite):
 	
 	def jump(self):
 		self.direction.y = self.jumpSpeed
+	
+	def dash(self, direction):
+		self.direction.y = 0
+		self.direction.x = 5 * direction
 
 	def update(self):
 		self.get_input()
