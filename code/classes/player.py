@@ -35,6 +35,12 @@ class Player(pygame.sprite.Sprite):
 		self.inivincibleDuration = 400
 		self.hurtTime = 0
 
+		#pause
+		self.pausedDirection = 0
+		self.paused = False
+		self.time1 = 0
+		self.time2 = 0
+
 	def importCharacterAssets(self):
 		characterPath = './graphics/character/'
 		self.animations = {"idle" :[], "run":[], "jump":[], "fall":[]}
@@ -79,14 +85,15 @@ class Player(pygame.sprite.Sprite):
 		
 	def get_input(self):
 		keys = pygame.key.get_pressed()
-		if keys[pygame.K_RIGHT]:
-			self.direction.x = 1
-			self.facing = "right"
-		elif keys[pygame.K_LEFT]:
-			self.direction.x = -1
-			self.facing = "left"
-		else:
-			self.direction.x = 0
+		if self.paused == False:
+			if keys[pygame.K_RIGHT]:
+				self.direction.x = 1
+				self.facing = "right"
+			elif keys[pygame.K_LEFT]:
+				self.direction.x = -1
+				self.facing = "left"
+			else:
+				self.direction.x = 0
 
 		if keys[pygame.K_z]:
 			#if (self.direction.y == 0) and self.onCeiling == False:
@@ -103,6 +110,24 @@ class Player(pygame.sprite.Sprite):
 			elif self.facing == "right":
 				self.dash(1)
 			self.dashed == True
+		
+		if keys[pygame.K_ESCAPE]:
+			if self.paused == True: #Paused State
+				self.time2 = time.time()
+				if (self.time2 - self.time1 >= 0.5):
+					self.time2 = time.time()
+					self.direction.x = 0
+					self.direction.y = 0
+					self.paused = False
+			else:	#Game State
+				self.time1 = time.time()
+				if (self.time1 - self.time2 >= 0.5):
+					self.pausedDirectionX = self.direction.x
+					self.pausedDirectionY = self.direction.y
+					self.direction.y = 0
+					self.direction.x = 0
+					self.paused = True
+
 
 	def getStatus(self):
 		if self.direction.y < 0:
@@ -133,15 +158,17 @@ class Player(pygame.sprite.Sprite):
 		else: return 255
 
 	def applyGravity(self):
-		self.direction.y += self.gravity
-		self.rect.y += self.direction.y
+		if self.paused == False:
+			self.direction.y += self.gravity
+			self.rect.y += self.direction.y
 	
 	def jump(self):
 		self.direction.y = self.jumpSpeed
 	
 	def dash(self, direction):
-		self.direction.y = 0
-		self.direction.x = 5 * direction
+		if self.paused == False:
+			self.direction.y = 0
+			self.direction.x = 5 * direction
 
 	def update(self):
 		self.get_input()
