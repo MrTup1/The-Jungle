@@ -204,7 +204,8 @@ class Level:
                     self.explosionSprites.add(explosionSprite)
                     opossum.kill()
                 else:
-                    self.player.sprite.getDamage()
+                    if self.player.sprite.paused == False:
+                        self.player.sprite.getDamage()
 
     def run(self):
 
