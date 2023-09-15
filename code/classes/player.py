@@ -12,6 +12,7 @@ class Player(pygame.sprite.Sprite):
 		self.animationSpeed = 0.15
 		self.image = self.animations['idle'][self.frameIndex]
 		self.rect = self.image.get_rect(topleft = pos)
+		self.collisionRect = pygame.Rect(self.rect.topleft, (40, self.rect.height))
 
 		#player status
 		self.status = "idle"
@@ -69,19 +70,6 @@ class Player(pygame.sprite.Sprite):
 		else:
 			self.image.set_alpha(255)
 
-		#draws image on where actual rect is (stick to ground)
-		if self.onGround and self.onRight:
-			self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
-		elif self.onGround and self.onLeft:
-			self.rect = self.image.get_rect(bottomleft = self.rect.bottomleft)
-		elif self.onGround:
-			self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
-		elif self.onCeiling and self.onRight:
-			self.rect = self.image.get_rect(topright = self.rect.topright)
-		elif self.onCeiling and self.onLeft:
-			self.rect = self.image.get_rect(topleft = self.rect.topleft)
-		elif self.onCeiling:
-			self.rect = self.image.get_rect(midtop = self.rect.midtop)
 		
 	def get_input(self):
 		keys = pygame.key.get_pressed()
@@ -96,7 +84,6 @@ class Player(pygame.sprite.Sprite):
 				self.direction.x = 0
 
 		if keys[pygame.K_z]:
-			#if (self.direction.y == 0) and self.onCeiling == False:
 			self.time += 1
 			if self.time < 13 and self.onCeiling == False and self.releasedJump == False:
 					self.jump()
@@ -132,9 +119,9 @@ class Player(pygame.sprite.Sprite):
 	def getStatus(self):
 		if self.direction.y < 0:
 			self.status = "jump"
-		elif self.direction.y > 0.8:
+		elif self.direction.y > 0.8 and self.releasedJump == True:
 			self.status = "fall"
-		else:
+		elif self.onGround == True:
 			if self.direction.x != 0:
 				self.status = "run"
 			else:

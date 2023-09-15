@@ -76,7 +76,6 @@ while run == True:
 
 	#update display window
 	pygame.display.update()
-	print(clock.get_fps())
 	clock.tick(60)
 	
 pygame.quit()
