@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect(topleft = pos)
 		self.rect.height = 64
 		self.rect.width = 32
-		self.collisionRect = pygame.Rect(self.rect.topleft , (24 , 64))
+		self.collisionRect = pygame.Rect(self.rect.topleft , (24 , 50))
 
 		#player status
 		self.status = "idle"
