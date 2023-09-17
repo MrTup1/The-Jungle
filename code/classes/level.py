@@ -8,6 +8,8 @@ from functions.support import *
 from classes.opossum import Opossum
 from classes.camera import CameraGroup
 from functions.background import Background
+from functions.button import Button
+import numpy as np
 
 class Level:
     def __init__(self, currentLevel, surface, createOverworld, updateCoins, changeHealth):
@@ -31,6 +33,13 @@ class Level:
 
         #UI
         self.updateCoins = updateCoins
+        self.resumeImg = pygame.image.load("./graphics/ui/Resume.png").convert_alpha()
+        self.optionsImg = pygame.image.load("./graphics/ui/Options.png").convert_alpha()
+        self.quitImg = pygame.image.load("./graphics/ui/Quit.png").convert_alpha() 
+
+        self.resumeButton = Button(400, 110, self.resumeImg, 1)
+        self.optionsButton = Button(400, 220, self.optionsImg, 1)
+        self.quitButton = Button(400, 330, self.quitImg, 1)
 
         self.explosionSprites = pygame.sprite.Group()
 
@@ -123,39 +132,35 @@ class Level:
     
     def horizontalCollision(self):
         player = self.player.sprite
-        player.rect.x += player.direction.x * player.speed
+        player.collisionRect.x += player.direction.x * player.speed
         collidableSprites = self.terrainSprites.sprites() + self.fg_palm_sprites.sprites()
 
         for sprite in collidableSprites:
-            if sprite.rect.colliderect(player.rect):
+            if sprite.rect.colliderect(player.collisionRect):
                 if player.direction.x < 0:
-                    player.rect.left = sprite.rect.right
+                    player.collisionRect.left = sprite.rect.right
                     player.onLeft = True
-                    self.currentX = player.rect.left
+                    self.currentX = player.collisionRect.left
                 elif player.direction.x > 0:
-                    player.rect.right = sprite.rect.left
+                    player.collisionRect.right = sprite.rect.left
                     player.onRight = True
-                    self.currentX = player.rect.right 
+                    self.currentX = player.collisionRect.right 
                     
-        if player.onLeft and (player.rect.left < self.currentX or player.direction.x >= 0):
-            player.onLeft = False
-        if player.onLeft and (player.rect.right > self.currentX or player.direction.x <= 0):
-            player.onRight = False
-           
+
     def verticalCollision(self):
         player = self.player.sprite
         player.applyGravity()
         collidableSprites = self.terrainSprites.sprites() + self.fg_palm_sprites.sprites()
 
         for sprite in collidableSprites:
-            if sprite.rect.colliderect(player.rect):
+            if sprite.rect.colliderect(player.collisionRect):
                 if player.direction.y > 0:
-                    player.rect.bottom = sprite.rect.top
+                    player.collisionRect.bottom = sprite.rect.top
                     player.direction.y = 0
                     player.onGround = True
                     player.releasedJump = False
                 elif player.direction.y < 0:
-                    player.rect.top = sprite.rect.bottom
+                    player.collisionRect.top = sprite.rect.bottom
                     player.direction.y = 0
                     player.onCeiling = True
                     player.releasedJump = False
@@ -207,6 +212,15 @@ class Level:
                     if self.player.sprite.paused == False:
                         self.player.sprite.getDamage()
 
+    def menu(self):
+        if self.player.sprite.paused: 
+            if self.resumeButton.draw(screen):
+                self.player.sprite.paused = False
+            if self.optionsButton.draw(screen):
+                print("Options")
+            if self.quitButton.draw(screen):
+                self.createOverworld(self.currentLevel, 0)
+
     def run(self):
 
         self.opossumCollision()
@@ -221,6 +235,7 @@ class Level:
         self.checkWin()
         self.checkCoin()
         self.checkOpossumCollisions()
+        self.menu()
 
 
     

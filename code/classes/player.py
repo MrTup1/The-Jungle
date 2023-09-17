@@ -3,6 +3,7 @@ import time
 from settings import *
 from functions.support import importFolder
 from math import sin
+import numpy as np
 
 class Player(pygame.sprite.Sprite):
 	def __init__(self, pos, group, changeHealth):
@@ -12,7 +13,9 @@ class Player(pygame.sprite.Sprite):
 		self.animationSpeed = 0.15
 		self.image = self.animations['idle'][self.frameIndex]
 		self.rect = self.image.get_rect(topleft = pos)
-		self.collisionRect = pygame.Rect(self.rect.topleft, (40, self.rect.height))
+		self.rect.height = 64
+		self.rect.width = 32
+		self.collisionRect = pygame.Rect(self.rect.topleft , (24 , 64))
 
 		#player status
 		self.status = "idle"
@@ -60,9 +63,11 @@ class Player(pygame.sprite.Sprite):
 		image = animation[int(self.frameIndex)]
 		if self.facing == "right":
 			self.image = image
+			self.rect.bottomleft = self.collisionRect.bottomleft
 		else:
 			flippedImg = pygame.transform.flip(image, True, False)
 			self.image = flippedImg
+			self.rect.bottomright = self.collisionRect.bottomright
 
 		if self.invincible:
 			alpha = self.flicker()
@@ -129,7 +134,7 @@ class Player(pygame.sprite.Sprite):
 		
 	def getDamage(self):
 		if not self.invincible:
-			self.changeHealth(-1)
+			self.changeHealth(-1) 
 			self.invincible = True
 			self.hurtTime = pygame.time.get_ticks()
 
@@ -147,7 +152,7 @@ class Player(pygame.sprite.Sprite):
 	def applyGravity(self):
 		if self.paused == False:
 			self.direction.y += self.gravity
-			self.rect.y += self.direction.y
+			self.collisionRect.y += self.direction.y
 	
 	def jump(self):
 		self.direction.y = self.jumpSpeed
