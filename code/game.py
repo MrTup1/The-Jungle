@@ -18,7 +18,7 @@ class Game:
 		self.maxLevel = 0
 		self.overworld = Overworld(0, self.maxLevel, screen, self.createLevel)
 		self.status = 'overworld'
-		self.maxHealth = 5
+		self.maxHealth = 5	
 		self.currentHealth = 5
 		self.coins = 0
 

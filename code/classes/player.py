@@ -32,7 +32,8 @@ class Player(pygame.sprite.Sprite):
 		self.direction = pygame.math.Vector2(0,0)
 		self.speed = 4
 		self.gravity = 0.8
-		self.jumpSpeed = -10
+		self.acceleration = 0.2
+		self.jumpSpeed = -9
 
 		self.changeHealth = changeHealth
 		self.invincible = False
@@ -80,17 +81,17 @@ class Player(pygame.sprite.Sprite):
 		keys = pygame.key.get_pressed()
 		if self.paused == False:
 			if keys[pygame.K_RIGHT]:
-				self.direction.x = 1
+				self.accelerate(1)
 				self.facing = "right"
 			elif keys[pygame.K_LEFT]:
-				self.direction.x = -1
+				self.accelerate(-1)
 				self.facing = "left"
 			else:
 				self.direction.x = 0
 
 		if keys[pygame.K_z]:
 			self.time += 1
-			if self.time < 13 and self.onCeiling == False and self.releasedJump == False:
+			if self.time < 14 and self.onCeiling == False and self.releasedJump == False:
 					self.jump()
 		elif keys[pygame.K_z] == False:
 				self.time = 0
@@ -157,6 +158,16 @@ class Player(pygame.sprite.Sprite):
 	def jump(self):
 		self.direction.y = self.jumpSpeed
 	
+	def accelerate(self, direction):
+		if self.direction.x + self.acceleration * direction <= 1.25 and direction == 1 or self.direction.x + self.acceleration * direction >= -1.25 and direction == -1:
+			self.direction.x += self.acceleration * direction
+			self.collisionRect.x += self.direction.x *direction
+		else:
+			if direction == 1:
+				self.direction.x = 1.25
+			else: 
+				self.direction.x = -1.25
+
 	def dash(self, direction):
 		if self.paused == False:
 			self.direction.y = 0
