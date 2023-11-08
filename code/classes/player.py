@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect(topleft = pos)
 		self.rect.height = 64
 		self.rect.width = 32
-		self.collisionRect = pygame.Rect(self.rect.topleft , (24 , 64))
+		self.collisionRect = pygame.Rect(self.rect.topleft , (24 , 50))
 
 		#player status
 		self.status = "idle"
@@ -39,6 +39,9 @@ class Player(pygame.sprite.Sprite):
 		self.invincible = False
 		self.inivincibleDuration = 400
 		self.hurtTime = 0
+		self.dashedTime = 1020
+		self.dashCooldown = 500
+		self.dashCounter = 0
 
 		#pause
 		self.pausedDirection = 0
@@ -102,7 +105,10 @@ class Player(pygame.sprite.Sprite):
 				self.dash(-1)
 			elif self.facing == "right":
 				self.dash(1)
-			self.dashed == True
+			self.dashCounter +=1
+			if self.dashCounter > 10:
+				self.dashed = True
+				self.dashedTime = pygame.time.get_ticks()
 		
 		if keys[pygame.K_ESCAPE]:
 			if self.paused == True: #Paused State
@@ -128,6 +134,11 @@ class Player(pygame.sprite.Sprite):
 		elif self.direction.y > 0.8 and self.releasedJump == True:
 			self.status = "fall"
 		elif self.onGround == True:
+			if self.dashed:
+				currentTime = pygame.time.get_ticks()
+				if currentTime - self.dashedTime >= self.dashCooldown:
+					self.dashed = False
+					self.dashCounter = 0
 			if self.direction.x != 0:
 				self.status = "run"
 			else:
@@ -157,6 +168,7 @@ class Player(pygame.sprite.Sprite):
 	
 	def jump(self):
 		self.direction.y = self.jumpSpeed
+	
 	
 	def accelerate(self, direction):
 		if self.direction.x + self.acceleration * direction <= 1.25 and direction == 1 or self.direction.x + self.acceleration * direction >= -1.25 and direction == -1:

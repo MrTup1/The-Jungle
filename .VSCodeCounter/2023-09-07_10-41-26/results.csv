@@ -1,0 +1,25 @@
+"filename", "language", "TypeScript JSX", "XML", "Python", "comment", "blank", "total"
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/classes/camera.py", "Python", 0, 0, 29, 0, 8, 37
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/classes/level.py", "Python", 0, 0, 167, 8, 50, 225
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/classes/opossum.py", "Python", 0, 0, 21, 0, 5, 26
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/classes/platform.py", "Python", 0, 0, 11, 0, 2, 13
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/classes/player.py", "Python", 0, 0, 115, 4, 20, 139
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/classes/tile.py", "Python", 0, 0, 57, 0, 13, 70
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/classes/ui.py", "Python", 0, 0, 16, 2, 5, 23
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/functions/background.py", "Python", 0, 0, 29, 0, 5, 34
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/functions/support.py", "Python", 0, 0, 49, 0, 12, 61
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/game.py", "Python", 0, 0, 62, 4, 15, 81
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/game_data.py", "Python", 0, 0, 93, 0, 6, 99
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/overworld.py", "Python", 0, 0, 106, 0, 24, 130
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/code/settings.py", "Python", 0, 0, 35, 3, 8, 46
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/levels/level_data/level_0.tmx", "XML", 0, 397, 0, 0, 1, 398
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/levels/level_data/level_1.tmx", "XML", 0, 394, 0, 0, 1, 395
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/levels/tilesets/Premium_Trees_Black_Outline.tsx", "TypeScript JSX", 4, 0, 0, 0, 1, 5
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/levels/tilesets/coins.tsx", "TypeScript JSX", 4, 0, 0, 0, 1, 5
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/levels/tilesets/enemy.tsx", "TypeScript JSX", 5, 0, 0, 0, 1, 6
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/levels/tilesets/opossum.tsx", "TypeScript JSX", 7, 0, 0, 0, 1, 8
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/levels/tilesets/palms.tsx", "TypeScript JSX", 13, 0, 0, 0, 1, 14
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/levels/tilesets/setup_tiles.tsx", "TypeScript JSX", 4, 0, 0, 0, 1, 5
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/levels/tilesets/terrain_tileset.tsx", "TypeScript JSX", 4, 0, 0, 0, 1, 5
+"/Users/mrtup/Documents/GitHub/DungeonDestroyers/levels/tilesets/trees.tsx", "TypeScript JSX", 4, 0, 0, 0, 1, 5
+"Total", "-", 45, 791, 790, 21, 183, 1830
