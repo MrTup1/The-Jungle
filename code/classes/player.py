@@ -27,6 +27,7 @@ class Player(pygame.sprite.Sprite):
 		self.time = 0
 		self.releasedJump = False
 		self.dashed = False
+		self.finalDashed = False
 
 		#movement
 		self.direction = pygame.math.Vector2(0,0)
@@ -100,15 +101,15 @@ class Player(pygame.sprite.Sprite):
 				self.time = 0
 				self.releasedJump = True
 		
-		if keys[pygame.K_c] and self.dashed == False:
+		if keys[pygame.K_c] and self.finalDashed == False: #DASH
+			self.dashed = True
+		
+		print(self.dashed, self.finalDashed)
+		if self.dashed == True and self.finalDashed == False:
+			if self.facing == "right":
+				self.dashFunction(1)
 			if self.facing == "left":
-				self.dash(-1)
-			elif self.facing == "right":
-				self.dash(1)
-			self.dashCounter +=1
-			if self.dashCounter > 10:
-				self.dashed = True
-				self.dashedTime = pygame.time.get_ticks()
+				self.dashFunction(-1)
 		
 		if keys[pygame.K_ESCAPE]:
 			if self.paused == True: #Paused State
@@ -134,10 +135,10 @@ class Player(pygame.sprite.Sprite):
 		elif self.direction.y > 0.8 and self.releasedJump == True:
 			self.status = "fall"
 		elif self.onGround == True:
-			if self.dashed:
+			if self.finalDashed:
 				currentTime = pygame.time.get_ticks()
 				if currentTime - self.dashedTime >= self.dashCooldown:
-					self.dashed = False
+					self.finalDashed = False
 					self.dashCounter = 0
 			if self.direction.x != 0:
 				self.status = "run"
@@ -148,8 +149,21 @@ class Player(pygame.sprite.Sprite):
 		if not self.invincible:
 			self.changeHealth(-1) 
 			self.invincible = True
-			self.hurtTime = pygame.time.get_ticks()
+			self.hurtTime = pygame.time.get_ticks()\
 
+	def dashFunction(self, direction):
+		if self.dashed == True and self.dashCounter < 11:
+			self.dashCounter +=1
+			self.dash(direction)
+			if self.dashCounter > 10:
+				self.finalDashed = True
+				self.dashedTime = pygame.time.get_ticks()
+
+	def dash(self, direction):
+		if self.paused == False:
+			self.direction.y = 0
+			self.direction.x = 5 * direction
+	
 	def inivincibleTime(self):
 		if self.invincible:
 			currentTime = pygame.time.get_ticks()
@@ -180,10 +194,6 @@ class Player(pygame.sprite.Sprite):
 			else: 
 				self.direction.x = -1.25
 
-	def dash(self, direction):
-		if self.paused == False:
-			self.direction.y = 0
-			self.direction.x = 5 * direction
 
 	def update(self):
 		self.get_input()
