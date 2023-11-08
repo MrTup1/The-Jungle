@@ -138,6 +138,7 @@ class Player(pygame.sprite.Sprite):
 			if self.finalDashed:
 				currentTime = pygame.time.get_ticks()
 				if currentTime - self.dashedTime >= self.dashCooldown:
+					self.dashed = False
 					self.finalDashed = False
 					self.dashCounter = 0
 			if self.direction.x != 0:
@@ -152,10 +153,10 @@ class Player(pygame.sprite.Sprite):
 			self.hurtTime = pygame.time.get_ticks()\
 
 	def dashFunction(self, direction):
-		if self.dashed == True and self.dashCounter < 11:
+		if self.dashed == True and self.dashCounter < 6:
 			self.dashCounter +=1
 			self.dash(direction)
-			if self.dashCounter > 10:
+			if self.dashCounter > 5:
 				self.finalDashed = True
 				self.dashedTime = pygame.time.get_ticks()
 
