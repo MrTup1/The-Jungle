@@ -32,7 +32,7 @@ class Player(pygame.sprite.Sprite):
 		#movement
 		self.direction = pygame.math.Vector2(0,0)
 		self.speed = 4
-		self.gravity = 0.8
+		self.gravity = 1.4
 		self.acceleration = 0.2
 		self.jumpSpeed = -9
 
@@ -95,7 +95,7 @@ class Player(pygame.sprite.Sprite):
 
 		if keys[pygame.K_z]:
 			self.time += 1
-			if self.time < 14 and self.onCeiling == False and self.releasedJump == False:
+			if self.time < 16 and self.onCeiling == False and self.releasedJump == False:
 					self.jump()
 		elif keys[pygame.K_z] == False:
 				self.time = 0
@@ -104,7 +104,7 @@ class Player(pygame.sprite.Sprite):
 		if keys[pygame.K_c] and self.finalDashed == False: #DASH
 			self.dashed = True
 		
-		print(self.dashed, self.finalDashed)
+		print(self.direction.y)
 		if self.dashed == True and self.finalDashed == False:
 			if self.facing == "right":
 				self.dashFunction(1)
