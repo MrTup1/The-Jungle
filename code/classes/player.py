@@ -87,8 +87,7 @@ class Player(pygame.sprite.Sprite):
 		
 	def get_input(self):
 		currentTime = time.time() #Get new time every 60th of a second
-		print(self.createTime, currentTime)
-
+		
 		if currentTime - self.createTime >= self.createWait: #Check if time elapsed is higher than wait cooldown (250ms)
 			keys = pygame.key.get_pressed()
 			if self.paused == False:
