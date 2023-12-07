@@ -76,6 +76,8 @@ class Level:
 
     def create_tile_group(self, layout, type):
         spriteGroup = pygame.sprite.Group()
+        leaves_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
+        terrain_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
         
         for row_index, row in enumerate(layout):
             for column_index, value in enumerate(row):
@@ -84,12 +86,10 @@ class Level:
                     y = row_index * tileSize
 
                     if type == 'terrain': 
-                        terrain_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
                         tileSurface = terrain_tile_list[int(value)]
                         sprite = StaticTile(tileSize, x, y, tileSurface, self.cameraGroup)
 
                     if type == 'leaves':
-                        leaves_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
                         tileSurface = leaves_tile_list[int(value)]
                         sprite = StaticTile(tileSize, x, y, tileSurface, self.cameraGroup)
 
@@ -110,7 +110,6 @@ class Level:
                         sprite = Opossum(tileSize, x, y, self.cameraGroup)
 
                     if type == 'constraint':
-                        terrain_tile_list = import_cut_graphics('./graphics/terrain/jungle tileset.png')
                         tileSurface = terrain_tile_list[int(value)]
                         sprite = StaticTile(tileSize, x, y, tileSurface, self.cameraGroup)
 
