@@ -46,6 +46,7 @@ class Player(pygame.sprite.Sprite):
 
 		#pause
 		self.pausedDirection = 0
+		self.pausedCooldown = 0.15
 		self.paused = False
 		self.time1 = 0
 		self.time2 = 0
@@ -120,14 +121,14 @@ class Player(pygame.sprite.Sprite):
 			if keys[pygame.K_ESCAPE]:
 				if self.paused == True: #Paused State
 					self.time2 = time.time()
-					if (self.time2 - self.time1 >= 0.5):
+					if (self.time2 - self.time1 >= self.pausedCooldown):
 						self.time2 = time.time()
 						self.direction.x = 0
 						self.direction.y = 0
 						self.paused = False
 				else:	#Game State
 					self.time1 = time.time()
-					if (self.time1 - self.time2 >= 0.5):
+					if (self.time1 - self.time2 >= self.pausedCooldown):
 						self.pausedDirectionX = self.direction.x
 						self.pausedDirectionY = self.direction.y
 						self.direction.y = 0
