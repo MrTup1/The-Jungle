@@ -18,6 +18,13 @@ class Level:
         self.bgScroll = bgScroll
         self.currentX = 0
         self.changehealth = changeHealth
+        
+        #Pause
+        self.pauseDirection = 0
+        self.pausedCooldown = 0.25
+        self.paused = False
+        self.time1 = 0
+        self.time2 = 0 
 
         #overworld
         self.currentLevel = currentLevel
@@ -122,7 +129,7 @@ class Level:
                 x = column_index * tileSize
                 y = row_index * tileSize
                 if value == '0':
-                    sprite = Player((x,y), self.cameraGroup, changeHealth)
+                    sprite = Player((x,y), self.cameraGroup, changeHealth, self.paused)
                     self.player.add(sprite)
                 if value == '1':
                     hatSurface = pygame.image.load('./graphics/character/hat.png')
@@ -148,7 +155,8 @@ class Level:
 
     def verticalCollision(self):
         player = self.player.sprite
-        player.applyGravity()
+        if self.paused == False:
+            player.applyGravity()
         collidableSprites = self.terrainSprites.sprites() + self.fg_palm_sprites.sprites()
 
         for sprite in collidableSprites:
@@ -212,19 +220,40 @@ class Level:
                         self.player.sprite.getDamage()
 
     def menu(self):
-        if self.player.sprite.paused: 
+        if self.paused: 
             if self.resumeButton.draw(screen):
-                self.player.sprite.paused = False
+                self.paused = False
             if self.optionsButton.draw(screen):
                 print("Options")
             if self.quitButton.draw(screen):
                 self.createOverworld(self.currentLevel, 0)
 
+    def checkPause(self):
+        keys = pygame.key.get_pressed()
+        print(self.player.sprite.direction.y)
+        if keys[pygame.K_ESCAPE]:
+            if self.paused == True: #Paused State
+                self.time2 = time.time()
+                if (self.time2 - self.time1 >= self.pausedCooldown):
+                    self.time2 = time.time()
+                    self.player.sprite.direction.x = self.player.sprite.pausedDirectionX
+                    self.player.sprite.direction.y = self.player.sprite.pausedDirectionY
+                    self.paused = False
+            else:	#Game State
+                self.time1 = time.time()
+                if (self.time1 - self.time2 >= self.pausedCooldown):
+                    self.player.sprite.pausedDirectionX = self.player.sprite.direction.x
+                    self.player.sprite.pausedDirectionY = self.player.sprite.direction.y
+                    self.player.sprite.direction.y = 0
+                    self.player.sprite.direction.x = 0
+                    self.paused = True
+
     def run(self):
+        if self.paused == False: #Checks for old pause
+            self.cameraGroup.update() #Method for updating all tiles and enemies
 
+        self.checkPause()
         self.opossumCollision()
-
-        self.cameraGroup.update()
         self.cameraGroup.customDraw(self.player)
 
         self.horizontalCollision()
