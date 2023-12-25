@@ -89,32 +89,32 @@ class Player(pygame.sprite.Sprite):
 	def get_input(self):
 		currentTime = time.time() #Get new time every 60th of a second
 		keys = pygame.key.get_pressed()
-		
-		if keys[pygame.K_RIGHT]:
-			self.accelerate(1)
-			self.facing = "right"
-		elif keys[pygame.K_LEFT]:
-			self.accelerate(-1)
-			self.facing = "left"
-		else:
-			self.direction.x = 0
+		if currentTime - self.createTime >= self.createWait: #Check if time elapsed is higher than wait cooldown (250ms)
+			if keys[pygame.K_RIGHT]:
+				self.accelerate(1)
+				self.facing = "right"
+			elif keys[pygame.K_LEFT]:
+				self.accelerate(-1)
+				self.facing = "left"
+			else:
+				self.direction.x = 0
 
-		if keys[pygame.K_z]:
-			self.time += 1
-			if self.time < 16 and self.onCeiling == False and self.releasedJump == False:
-					self.jump()
-		elif keys[pygame.K_z] == False:
-				self.time = 0
-				self.releasedJump = True
-		
-		if keys[pygame.K_c] and self.finalDashed == False: #DASH
-			self.dashed = True
-		
-		if self.dashed == True and self.finalDashed == False:
-			if self.facing == "right":
-				self.dashFunction(1)
-			if self.facing == "left":
-				self.dashFunction(-1)
+			if keys[pygame.K_z]:
+				self.time += 1
+				if self.time < 16 and self.onCeiling == False and self.releasedJump == False:
+						self.jump()
+			elif keys[pygame.K_z] == False:
+					self.time = 0
+					self.releasedJump = True
+			
+			if keys[pygame.K_c] and self.finalDashed == False: #DASH
+				self.dashed = True
+			
+			if self.dashed == True and self.finalDashed == False:
+				if self.facing == "right":
+					self.dashFunction(1)
+				if self.facing == "left":
+					self.dashFunction(-1)
 
 
 	def getStatus(self):
