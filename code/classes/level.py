@@ -32,6 +32,10 @@ class Level:
         levelData = levels[self.currentLevel]
         self.new_max_level = levelData['unlock']
         
+        #Death
+        self.out_of_screen = False
+        self.spawnX = 10
+        self.spawnY = 10
         
         playerLayout = import_csv_layout(levelData['player'])
         self.player = pygame.sprite.GroupSingle()
@@ -79,7 +83,7 @@ class Level:
 
         self.playerSetup(playerLayout, changeHealth)
         levelWidth = len(terrainLayout[0])  * tileSize
-
+        
 
     def create_tile_group(self, layout, type):
         spriteGroup = pygame.sprite.Group()
@@ -129,11 +133,13 @@ class Level:
                 x = column_index * tileSize
                 y = row_index * tileSize
                 if value == '0':
+                    self.spawnX = x
+                    self.spawnY = y
                     sprite = Player((x,y), self.cameraGroup, changeHealth, self.paused)
                     self.player.add(sprite)
                 if value == '1':
                     hatSurface = pygame.image.load('./graphics/character/hat.png')
-                    sprite = StaticTile(tileSize, x, y, hatSurface, self.cameraGroup)
+                    sprite = StaticTile(28, x, y, hatSurface, self.cameraGroup)
                     self.goal.add(sprite)
     
     def horizontalCollision(self):
@@ -155,7 +161,7 @@ class Level:
 
     def verticalCollision(self):
         player = self.player.sprite
-        if self.paused == False:
+        if self.paused == False and self.out_of_screen == False:
             player.applyGravity()
         collidableSprites = self.terrainSprites.sprites() + self.fg_palm_sprites.sprites()
 
@@ -185,10 +191,11 @@ class Level:
                 opossum.reverse()
 
     def checkDeath(self):
-        #if player off screen + camera offset
-        if self.player.sprite.rect.top > screenHeight + 143:
-            self.changehealth(-1)
-            self.createOverworld(self.currentLevel, 0)
+        if self.player.sprite.rect.top > screenHeight + 143 and self.out_of_screen == False:
+            self.out_of_screen = True #Prevent continously damaging player
+            self.player.sprite.collisionRect.topleft = (self.spawnX, self.spawnY) #Teleport to where player spawned
+            self.player.sprite.getDamage() #Decrease by one health and invincible
+            self.out_of_screen = False #End of damage sequence
     
     def checkWin(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
@@ -230,7 +237,6 @@ class Level:
 
     def checkPause(self):
         keys = pygame.key.get_pressed()
-        print(self.player.sprite.direction.y)
         if keys[pygame.K_ESCAPE]:
             if self.paused == True: #Paused State
                 self.time2 = time.time()

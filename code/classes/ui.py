@@ -12,6 +12,9 @@ class UI:
         self.coinRect = self.coin.get_rect(topleft = (15, 45))
         self.font = pygame.font.Font('./graphics/ui/ARCADEPI.ttf', 15)
 
+        #GameOver
+        
+
     def showHealth(self, current, full):
         for i in range(current):
             self.displaySurface.blit(self.healthUI, (i * 20 * 1.2 + 10, 10))
