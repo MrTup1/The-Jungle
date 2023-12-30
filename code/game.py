@@ -15,8 +15,8 @@ from overworld import Overworld
 
 class Game: 
 	def __init__(self):
-		self.maxLevel = 1
-		self.overworld = Overworld(1, self.maxLevel, screen, self.createLevel)
+		self.maxLevel = 0
+		self.overworld = Overworld(0, self.maxLevel, screen, self.createLevel)
 		self.status = 'overworld'
 		self.maxHealth = 5	
 		self.currentHealth = 5
@@ -41,12 +41,17 @@ class Game:
 		self.coins += amount
 	
 	def gameOver(self):
-		if self.currentHealth <= 0:
-			self.currentHealth = 5
-			self.coins = 0
-			self.maxLevel = 0
-			self.overworld = Overworld(0, self.maxLevel, screen, self.createLevel)
-			self.status = 'overworld'
+		keys = pygame.key.get_pressed()
+		if self.currentHealth <= 0: #If player has no health left
+			self.level.dead = True #Set dead status to true
+			self.ui.drawBlackOverlay() 
+			self.ui.showGameOver()
+			if keys[pygame.K_RETURN]: #Wait for player to press "Enter"
+				self.currentHealth = 5
+				self.coins = 0
+				self.maxLevel = 0
+				self.status = 'overworld'
+				self.overworld = Overworld(0, self.maxLevel, screen, self.createLevel)
 
 	def run(self):
 		if self.status == 'overworld':
@@ -54,9 +59,9 @@ class Game:
 		else: 
 			self.level.run()
 			self.gameOver()
-			self.ui.showHealth(self.currentHealth, 5)
-			self.ui.showCoins(self.coins)
-
+			if self.level.dead == False:
+				self.ui.showHealth(self.currentHealth, 5)
+				self.ui.showCoins(self.coins)
 pygame.init() 
 
 #game loop

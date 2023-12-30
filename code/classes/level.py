@@ -9,6 +9,7 @@ from classes.opossum import Opossum
 from classes.camera import CameraGroup
 from functions.background import Background
 from functions.button import Button
+from classes.ui import UI
 import numpy as np
 
 class Level:
@@ -34,9 +35,12 @@ class Level:
         
         #Death
         self.out_of_screen = False
+        self.dead = False
         self.spawnX = 10
         self.spawnY = 10
         
+        self.ui = UI(screen)
+
         playerLayout = import_csv_layout(levelData['player'])
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
@@ -228,6 +232,7 @@ class Level:
 
     def menu(self):
         if self.paused: 
+            self.ui.drawBlackOverlay() 
             if self.resumeButton.draw(screen):
                 self.paused = False
             if self.optionsButton.draw(screen):
@@ -255,12 +260,13 @@ class Level:
                     self.paused = True
 
     def run(self):
-        if self.paused == False: #Checks for old pause
+        if self.paused == False and self.dead == False: #Player must both be alive and not paused for game to run
             self.cameraGroup.update() #Method for updating all tiles and enemies
 
         self.checkPause()
         self.opossumCollision()
         self.cameraGroup.customDraw(self.player)
+
 
         self.horizontalCollision()
         self.verticalCollision()

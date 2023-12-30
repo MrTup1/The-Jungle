@@ -18,6 +18,8 @@ class Background:
   
   def draw(self, surface, bgScroll):
     bgScroll = bgScroll + 400
+
+
     for j in range(-2, 100):
       self.speed = 1
       for i in self.bgImages:
