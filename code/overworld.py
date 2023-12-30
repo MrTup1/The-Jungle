@@ -97,6 +97,8 @@ class Overworld:
                 self.moving = True
             elif keys[pygame.K_SPACE] or keys[pygame.K_RETURN]:
                 self.createLevel(self.currentLevel)
+            elif keys[pygame.K_ESCAPE]:
+                self.createStart(self.currentLevel)
     
     def updateIconPosition(self):
         if self.moving and self.moveDirection:

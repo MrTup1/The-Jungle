@@ -57,7 +57,7 @@ class Game:
 				self.coins = 0
 				self.maxLevel = 0
 				self.status = 'overworld'
-				self.overworld = Overworld(0, self.maxLevel, screen, self.createLevel)
+				self.overworld = Overworld(0, self.maxLevel, screen, self.createLevel, self.createStart)
 
 	def run(self):
 		if self.status == 'overworld':
@@ -87,7 +87,7 @@ while run == True:
 			
 	#level.run()
 	screen.fill("WHITE")
-	
+
 	if game.run() == False:
 		run = False
 
