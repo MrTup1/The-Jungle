@@ -44,12 +44,13 @@ class Icon(pygame.sprite.Sprite):
         self.rect.center = self.pos
 
 class Overworld:
-    def __init__(self, startLevel, maxLevel, surface, createLevel):
+    def __init__(self, startLevel, maxLevel, surface, createLevel, createStart):
         self.displaySurface = surface
         self.maxLevel = maxLevel
         self.currentLevel = startLevel
         self.moving = False
         self.createLevel = createLevel
+        self.createStart = createStart
 
         self.moveDirection = pygame.math.Vector2(0,0)
         self.speed = 8

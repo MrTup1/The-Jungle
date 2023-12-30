@@ -8,6 +8,7 @@ from classes.player import Player
 from classes.tile import Tile
 from classes.level import Level
 from classes.ui import UI
+from classes.start import Start
 from functions.background import *
 from functions.support import *
 from game_data import *
@@ -16,8 +17,9 @@ from overworld import Overworld
 class Game: 
 	def __init__(self):
 		self.maxLevel = 0
-		self.overworld = Overworld(0, self.maxLevel, screen, self.createLevel)
-		self.status = 'overworld'
+		self.overworld = Overworld(0, self.maxLevel, screen, self.createLevel, self.createStart)
+		self.start = Start(0, screen, self.createOverworld)
+		self.status = 'start'
 		self.maxHealth = 5	
 		self.currentHealth = 5
 		self.coins = 0
@@ -31,9 +33,13 @@ class Game:
 	def createOverworld(self, currentLevel, newMaxLevel):
 		if newMaxLevel > self.maxLevel:
 			self.maxLevel = newMaxLevel
-		self.overworld = Overworld(currentLevel, self.maxLevel, screen, self.createLevel)
+		self.overworld = Overworld(currentLevel, self.maxLevel, screen, self.createLevel, self.createStart)
 		self.status = 'overworld'
 	
+	def createStart(self, currentLevel):
+		self.start = Start(currentLevel, screen, self.createOverworld)
+		self.status = 'start'
+
 	def changeHealth(self, amount):
 		self.currentHealth += amount
 
@@ -56,6 +62,10 @@ class Game:
 	def run(self):
 		if self.status == 'overworld':
 			self.overworld.run()
+		elif self.status == 'start':
+			self.start.run()
+			if self.start.getQuit():
+				return False
 		else: 
 			self.level.run()
 			self.gameOver()
@@ -77,7 +87,9 @@ while run == True:
 			
 	#level.run()
 	screen.fill("WHITE")
-	game.run()
+	
+	if game.run() == False:
+		run = False
 
 	#update display window
 	pygame.display.update()
