@@ -198,6 +198,9 @@ class Level:
         if self.player.sprite.rect.top > screenHeight + 143 and self.out_of_screen == False:
             self.out_of_screen = True #Prevent continously damaging player
             self.player.sprite.collisionRect.topleft = (self.spawnX, self.spawnY) #Teleport to where player spawned
+            self.player.sprite.createTime = time.time() #Reset spawn time
+            self.player.sprite.direction.x = 0 #Prevent movement immediately after spawning
+            self.player.sprite.direction.y = 0
             self.player.sprite.getDamage() #Decrease by one health and invincible
             self.out_of_screen = False #End of damage sequence
     
