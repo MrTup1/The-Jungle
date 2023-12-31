@@ -59,13 +59,15 @@ class Game:
 				self.status = 'overworld'
 				self.overworld = Overworld(0, self.maxLevel, screen, self.createLevel, self.createStart)
 
+	def getQuit(self):
+		if self.start.getQuit():
+			return True
+
 	def run(self):
 		if self.status == 'overworld':
 			self.overworld.run()
 		elif self.status == 'start':
 			self.start.run()
-			if self.start.getQuit():
-				return False
 		else: 
 			self.level.run()
 			self.gameOver()
@@ -87,9 +89,9 @@ while run == True:
 			
 	#level.run()
 	screen.fill("WHITE")
-
-	if game.run() == False:
+	if game.getQuit():
 		run = False
+	game.run()
 
 	#update display window
 	pygame.display.update()
