@@ -35,13 +35,17 @@ class Player(pygame.sprite.Sprite):
 		self.gravity = 1.4
 		self.acceleration = 0.2
 		self.jumpSpeed = -9
+		self.jumped = False
+		self.doubleJumped = False
+		self.maxJumps = 2
+		self.jumpsRemaining = 2
 
 		self.changeHealth = changeHealth
 		self.invincible = False
 		self.inivincibleDuration = 400
 		self.hurtTime = 0
 		self.dashedTime = 1020
-		self.dashCooldown = 500
+		self.dashCooldown = 250
 		self.dashCounter = 0
 
 		#pause
@@ -87,6 +91,9 @@ class Player(pygame.sprite.Sprite):
 
 		
 	def get_input(self):
+		print(self.jumpsRemaining, self.jumped, self.doubleJumped)
+
+
 		currentTime = time.time() #Get new time every 60th of a second
 		keys = pygame.key.get_pressed()
 		if currentTime - self.createTime >= self.createWait: #Check if time elapsed is higher than wait cooldown (250ms)
@@ -99,13 +106,26 @@ class Player(pygame.sprite.Sprite):
 			else:
 				self.direction.x = 0
 
-			if keys[pygame.K_z]:
+			if keys[pygame.K_z]: #JUMP
 				self.time += 1
-				if self.time < 16 and self.onCeiling == False and self.releasedJump == False:
-						self.jump()
+				
+				if self.jumpsRemaining > 0: #Actual movement of player
+					if self.time < 16 and self.onCeiling == False:
+							self.jump()
+
+				if not self.jumped: #If player has jumped 1st time
+					self.jumped = True 
+					self.jumpsRemaining -= 1 
+
+				if not self.doubleJumped and self.jumped and self.releasedJump == True: #Check if first jump is completed
+					self.doubleJumped = True	
+
 			elif keys[pygame.K_z] == False:
 					self.time = 0
-					self.releasedJump = True
+					if self.jumped:
+						self.releasedJump = True #After 1st release of key from jump
+					if self.doubleJumped:  #After 2nd release of key from jump
+						self.jumpsRemaining -= 1 
 			
 			if keys[pygame.K_c] and self.finalDashed == False: #DASH
 				self.dashed = True
@@ -123,6 +143,11 @@ class Player(pygame.sprite.Sprite):
 		elif self.direction.y > 0.8 and self.releasedJump == True:
 			self.status = "fall"
 		elif self.onGround == True:
+			#Reset attributes
+			self.jumped = False
+			self.doubleJumped = False
+			self.jumpsRemaining = self.maxJumps
+			
 			if self.finalDashed:
 				currentTime = pygame.time.get_ticks()
 				if currentTime - self.dashedTime >= self.dashCooldown:
@@ -144,7 +169,7 @@ class Player(pygame.sprite.Sprite):
 		if self.dashed == True and self.dashCounter < 6:
 			self.dashCounter +=1
 			self.dash(direction)
-			if self.dashCounter > 5:
+			if self.dashCounter > 5: 
 				self.finalDashed = True
 				self.dashedTime = pygame.time.get_ticks()
 
@@ -153,6 +178,7 @@ class Player(pygame.sprite.Sprite):
 			self.direction.y = 0
 			self.direction.x = 5 * direction
 	
+
 	def inivincibleTime(self):
 		if self.invincible:
 			currentTime = pygame.time.get_ticks()
