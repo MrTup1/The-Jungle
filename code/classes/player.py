@@ -6,7 +6,7 @@ from math import sin
 import numpy as np
 
 class Player(pygame.sprite.Sprite):
-	def __init__(self, pos, group, changeHealth, paused):
+	def __init__(self, pos, group, changeHealth, paused, currentLevel):
 		super().__init__(group)
 		self.importCharacterAssets()
 		self.frameIndex = 0
@@ -16,6 +16,9 @@ class Player(pygame.sprite.Sprite):
 		self.rect.height = 64
 		self.rect.width = 32
 		self.collisionRect = pygame.Rect(self.rect.topleft , (24 , 50))
+		self.currentLevel = currentLevel
+		
+
 
 		#player status
 		self.status = "idle"
@@ -28,6 +31,8 @@ class Player(pygame.sprite.Sprite):
 		self.releasedJump = False
 		self.dashed = False
 		self.finalDashed = False
+		self.unlockedDash = False
+		self.unlockedDouble = False
 
 		#movement
 		self.direction = pygame.math.Vector2(0,0)
@@ -59,6 +64,8 @@ class Player(pygame.sprite.Sprite):
 		self.createTime = time.time()
 		self.createWait = 0.25
 
+		self.checkUnlocked()
+
 	def importCharacterAssets(self):
 		characterPath = './graphics/character/'
 		self.animations = {"idle" :[], "run":[], "jump":[], "fall":[]}
@@ -89,11 +96,13 @@ class Player(pygame.sprite.Sprite):
 		else:
 			self.image.set_alpha(255)
 
-		
+	def checkUnlocked(self):
+		if self.currentLevel > 1:
+			self.unlockedDash = True
+		if self.currentLevel > 2:
+			self.unlockedDouble = True
+	
 	def get_input(self):
-		print(self.jumpsRemaining, self.jumped, self.doubleJumped)
-
-
 		currentTime = time.time() #Get new time every 60th of a second
 		keys = pygame.key.get_pressed()
 		if currentTime - self.createTime >= self.createWait: #Check if time elapsed is higher than wait cooldown (250ms)
@@ -106,35 +115,45 @@ class Player(pygame.sprite.Sprite):
 			else:
 				self.direction.x = 0
 
-			if keys[pygame.K_z]: #JUMP
-				self.time += 1
-				
-				if self.jumpsRemaining > 0: #Actual movement of player
-					if self.time < 16 and self.onCeiling == False:
-							self.jump()
+			if self.unlockedDouble: #If unlocked double jump
+				if keys[pygame.K_z]: #JUMP
+					self.time += 1
+					
+					if self.jumpsRemaining > 0: #Actual movement of player
+						if self.time < 16 and self.onCeiling == False:
+								self.jump()
 
-				if not self.jumped: #If player has jumped 1st time
-					self.jumped = True 
-					self.jumpsRemaining -= 1 
-
-				if not self.doubleJumped and self.jumped and self.releasedJump == True: #Check if first jump is completed
-					self.doubleJumped = True	
-
-			elif keys[pygame.K_z] == False:
-					self.time = 0
-					if self.jumped:
-						self.releasedJump = True #After 1st release of key from jump
-					if self.doubleJumped:  #After 2nd release of key from jump
+					if not self.jumped: #If player has jumped 1st time
+						self.jumped = True 
 						self.jumpsRemaining -= 1 
-			
-			if keys[pygame.K_c] and self.finalDashed == False: #DASH
-				self.dashed = True
-			
-			if self.dashed == True and self.finalDashed == False:
-				if self.facing == "right":
-					self.dashFunction(1)
-				if self.facing == "left":
-					self.dashFunction(-1)
+
+					if not self.doubleJumped and self.jumped and self.releasedJump == True: #Check if first jump is completed
+						self.doubleJumped = True	
+
+				elif keys[pygame.K_z] == False:
+						self.time = 0
+						if self.jumped:
+							self.releasedJump = True #After 1st release of key from jump
+						if self.doubleJumped:  #After 2nd release of key from jump
+							self.jumpsRemaining -= 1 
+			else:	#Jump when double jump is still locked			
+				if keys[pygame.K_z]:
+					self.time += 1
+					if self.time < 16 and self.onCeiling == False and self.releasedJump == False:
+							self.jump()
+				elif keys[pygame.K_z] == False:
+						self.time = 0
+						self.releasedJump = True
+		
+			if self.unlockedDash:
+				if keys[pygame.K_c] and self.finalDashed == False: #DASH
+					self.dashed = True
+				
+				if self.dashed == True and self.finalDashed == False:
+					if self.facing == "right":
+						self.dashFunction(1)
+					if self.facing == "left":
+						self.dashFunction(-1)
 
 
 	def getStatus(self):
@@ -210,6 +229,7 @@ class Player(pygame.sprite.Sprite):
 
 
 	def update(self):
+		print(self.unlockedDash, self.unlockedDouble)
 		self.get_input()
 		self.getStatus()
 		self.animate()

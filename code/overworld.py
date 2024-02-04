@@ -119,6 +119,9 @@ class Overworld:
         final = (end - start).normalize()
         return (final)
     
+    def getMaxLevel(self):
+        return self.maxLevel
+    
     def run(self):
         self.input()
         self.updateIconPosition()

@@ -139,7 +139,7 @@ class Level:
                 if value == '0':
                     self.spawnX = x
                     self.spawnY = y
-                    sprite = Player((x,y), self.cameraGroup, changeHealth, self.paused)
+                    sprite = Player((x,y), self.cameraGroup, changeHealth, self.paused, self.currentLevel)
                     self.player.add(sprite)
                 if value == '1':
                     hatSurface = pygame.image.load('./graphics/character/hat.png')
