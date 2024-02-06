@@ -1,4 +1,5 @@
 import pygame
+import time
 from game_data import levels
 from functions.support import * 
 from classes.tile import AnimatedTile
@@ -60,6 +61,9 @@ class Overworld:
         self.setupNodes()
         self.setupIcon()
 
+        self.createTime = time.time()
+        self.createWait = 0.25
+
     def setupNodes(self):
         self.nodes = pygame.sprite.Group()
 
@@ -85,8 +89,8 @@ class Overworld:
 
     def input(self):
         keys = pygame.key.get_pressed()
-
-        if not self.moving:
+        currentTime = time.time()
+        if not self.moving and currentTime - self.createTime >= self.createWait: #added delay before input
             if keys[pygame.K_RIGHT] and self.currentLevel < self.maxLevel:
                 self.moveDirection = self.getMovementData(True)
                 self.currentLevel += 1

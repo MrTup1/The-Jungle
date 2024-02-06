@@ -26,6 +26,8 @@ class Level:
         self.paused = False
         self.time1 = 0
         self.time2 = 0 
+        self.healthAdded = False
+        self.completedLevel = False
 
         #overworld
         self.currentLevel = currentLevel
@@ -139,7 +141,7 @@ class Level:
                 if value == '0':
                     self.spawnX = x
                     self.spawnY = y
-                    sprite = Player((x,y), self.cameraGroup, changeHealth, self.paused, self.currentLevel)
+                    sprite = Player((x,y), self.cameraGroup, changeHealth, self.paused, self.currentLevel) #New parameter
                     self.player.add(sprite)
                 if value == '1':
                     hatSurface = pygame.image.load('./graphics/character/hat.png')
@@ -208,8 +210,18 @@ class Level:
     
     def checkWin(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
-            self.changehealth(1)
-            self.createOverworld(self.currentLevel, self.new_max_level)    
+            self.completedLevel = True
+            keys = pygame.key.get_pressed()
+            if not self.healthAdded: 
+                self.changehealth(1)
+                self.healthAdded = True
+            if self.new_max_level == 2:
+                self.ui.drawBlackOverlay()
+                self.ui.unlockdashAbility()
+                if keys[pygame.K_SPACE] or keys[pygame.K_RETURN]:
+                    self.createOverworld(self.currentLevel, self.new_max_level)    
+            else:
+                self.createOverworld(self.currentLevel, self.new_max_level)    
 
     def checkCoin(self):
         collidedCoins = pygame.sprite.spritecollide(self.player.sprite, self.coinSprites, True)
@@ -265,7 +277,7 @@ class Level:
                     self.paused = True
 
     def run(self):
-        if self.paused == False and self.dead == False: #Player must both be alive and not paused for game to run
+        if self.paused == False and self.dead == False and not self.completedLevel: #Player must both be alive and not paused for game to run
             self.cameraGroup.update() #Method for updating all tiles and enemies
 
         self.checkPause()

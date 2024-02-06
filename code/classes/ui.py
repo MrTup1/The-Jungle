@@ -17,6 +17,11 @@ class UI:
         self.font2 = pygame.font.Font('./graphics/ui/ARCADEPI.ttf', 40)
         self.font_gameOver = pygame.font.Font('./graphics/ui/ARCADEPI.ttf', 20)
 
+        #Dash Ability
+        self.dashImage = pygame.image.load('./graphics/ui/speedGraphic.png').convert_alpha()
+        self.dashRect = self.coin.get_rect(center = (screenWidth // 2 - 100, screenHeight // 2 - 125))
+        self.fontEnter = pygame.font.Font('./graphics/ui/ARCADEPI.ttf', 10)
+
     def showHealth(self, current, full):
         for i in range(current):
             self.displaySurface.blit(self.healthUI, (i * 20 * 1.2 + 10, 10))
@@ -38,6 +43,24 @@ class UI:
         gameOverText = self.font_gameOver.render("Press ENTER to restart from Level One", False, "WHITE") #Restart text in bottom
         gameOverTextRect = gameOverText.get_rect(center = (screenWidth // 2, screenHeight // 2 + 50)) #Slightly below game over text
         self.displaySurface.blit(gameOverText, gameOverTextRect) 
+
+    def unlockdashAbility(self):
+        self.displaySurface.blit(self.dashImage, self.dashRect)
+        unlockSurface = self.font2.render("DASH ABILITY UNLOCKED", False, 'GREEN') #Foreground Font
+        unlockBg = self.font2.render("DASH ABILITY UNLOCKED", False, "#009468") #Background Font
+        unlockRect = unlockSurface.get_rect(center = (screenWidth // 2, screenHeight // 2 + 100)) #Foreground rect
+        unlockBg_Rect = unlockSurface.get_rect(topleft = (unlockRect.x + 2, unlockRect.y + 2)) #Background shifted by 2 pixels in x and y direction
+        self.displaySurface.blit(unlockBg, unlockBg_Rect)
+        self.displaySurface.blit(unlockSurface, unlockRect)
+
+        unlockText = self.font_gameOver.render("Press C to dash forwards", False, "WHITE") #Restart text in bottom
+        unlockTextRect = unlockText.get_rect(center = (screenWidth // 2, screenHeight // 2 + 150)) #Slightly below game over text
+        self.displaySurface.blit(unlockText, unlockTextRect) 
+
+        enterText = self.fontEnter.render("Press enter to return to main menu", False, "WHITE") #Enter text in bottomQ
+        enterRect = enterText.get_rect(center = (screenWidth//2, screenHeight //2 + 170)) #Slightly below unlock text
+        self.displaySurface.blit(enterText, enterRect) 
+
     
     def drawBlackOverlay(self):
         overlay = pygame.Surface((screenWidth, screenHeight))

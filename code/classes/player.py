@@ -17,8 +17,6 @@ class Player(pygame.sprite.Sprite):
 		self.rect.width = 32
 		self.collisionRect = pygame.Rect(self.rect.topleft , (24 , 50))
 		self.currentLevel = currentLevel
-		
-
 
 		#player status
 		self.status = "idle"
@@ -229,7 +227,6 @@ class Player(pygame.sprite.Sprite):
 
 
 	def update(self):
-		print(self.unlockedDash, self.unlockedDouble)
 		self.get_input()
 		self.getStatus()
 		self.animate()
