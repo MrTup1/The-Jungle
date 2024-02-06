@@ -215,11 +215,16 @@ class Level:
             if not self.healthAdded: 
                 self.changehealth(1)
                 self.healthAdded = True
-            if self.new_max_level == 2:
+            if self.new_max_level == 2: #Check if level is the level that unlocks Dash
                 self.ui.drawBlackOverlay()
                 self.ui.unlockdashAbility()
                 if keys[pygame.K_SPACE] or keys[pygame.K_RETURN]:
                     self.createOverworld(self.currentLevel, self.new_max_level)    
+            if self.new_max_level == 3: #Check if level is the level that unlcoks Double Jump  
+                self.ui.drawBlackOverlay()
+                self.ui.unlockDoubleAbility() 
+                if keys[pygame.K_SPACE] or keys[pygame.K_RETURN]:
+                    self.createOverworld(self.currentLevel, self.new_max_level)       
             else:
                 self.createOverworld(self.currentLevel, self.new_max_level)    
 

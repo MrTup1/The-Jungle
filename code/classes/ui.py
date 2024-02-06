@@ -20,6 +20,8 @@ class UI:
         #Dash Ability
         self.dashImage = pygame.image.load('./graphics/ui/speedGraphic.png').convert_alpha()
         self.dashRect = self.coin.get_rect(center = (screenWidth // 2 - 100, screenHeight // 2 - 125))
+        self.doubleImage = pygame.image.load('./graphics/ui/jumpBoost.png').convert_alpha()
+        self.doubleRect = self.coin.get_rect(center = (screenWidth // 2 - 100, screenHeight // 2 - 125))
         self.fontEnter = pygame.font.Font('./graphics/ui/ARCADEPI.ttf', 10)
 
     def showHealth(self, current, full):
@@ -61,6 +63,22 @@ class UI:
         enterRect = enterText.get_rect(center = (screenWidth//2, screenHeight //2 + 170)) #Slightly below unlock text
         self.displaySurface.blit(enterText, enterRect) 
 
+    def unlockDoubleAbility(self):
+        self.displaySurface.blit(self.doubleImage, self.doubleRect)
+        unlockSurface = self.font2.render("DOUBLE JUMP ABILITY UNLOCKED", False, 'GREEN') #Foreground Font
+        unlockBg = self.font2.render("DOUBLE JUMP ABILITY UNLOCKED", False, "#009468") #Background Font
+        unlockRect = unlockSurface.get_rect(center = (screenWidth // 2, screenHeight // 2 + 100)) #Foreground rect
+        unlockBg_Rect = unlockSurface.get_rect(topleft = (unlockRect.x + 2, unlockRect.y + 2)) #Background shifted by 2 pixels in x and y direction
+        self.displaySurface.blit(unlockBg, unlockBg_Rect)
+        self.displaySurface.blit(unlockSurface, unlockRect)
+
+        unlockText = self.font_gameOver.render("Press Z in mid air to jump a 2nd time!", False, "WHITE") #Restart text in bottom
+        unlockTextRect = unlockText.get_rect(center = (screenWidth // 2, screenHeight // 2 + 150)) #Slightly below game over text
+        self.displaySurface.blit(unlockText, unlockTextRect) 
+
+        enterText = self.fontEnter.render("Press enter to return to main menu", False, "WHITE") #Enter text in bottomQ
+        enterRect = enterText.get_rect(center = (screenWidth//2, screenHeight //2 + 170)) #Slightly below unlock text
+        self.displaySurface.blit(enterText, enterRect) 
     
     def drawBlackOverlay(self):
         overlay = pygame.Surface((screenWidth, screenHeight))
