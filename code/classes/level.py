@@ -215,7 +215,7 @@ class Level:
             if not self.healthAdded: 
                 self.changehealth(1)
                 self.healthAdded = True
-            if self.new_max_level == 2: #Check if level is the level that unlocks Dash
+            elif self.new_max_level == 2: #Check if level is the level that unlocks Dash
                 self.ui.drawBlackOverlay()
                 self.ui.unlockdashAbility()
                 if keys[pygame.K_SPACE] or keys[pygame.K_RETURN]:
