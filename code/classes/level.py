@@ -177,7 +177,9 @@ class Level:
                     player.collisionRect.bottom = sprite.rect.top
                     player.direction.y = 0
                     player.onGround = True
-                    player.onGroundTime = time.time()
+                    if player.firstOnGround:
+                        player.onGroundTime = time.time()
+                        player.firstOnGround = False
                     player.releasedJump = False
                 elif player.direction.y < 0:
                     player.collisionRect.top = sprite.rect.bottom
@@ -187,6 +189,9 @@ class Level:
 
         if player.onGround and player.direction.y < 0 or player.direction.y > 1:
             player.onGround = False
+            player.firstOnGround = True
+            player.opossumVulnerability = False
+
         if player.onCeiling and player.direction.y > 0:
             player.onCeiling = False
 
@@ -216,12 +221,12 @@ class Level:
             if not self.healthAdded: 
                 self.changehealth(1)
                 self.healthAdded = True
-            elif self.new_max_level == 2: #Check if level is the level that unlocks Dash
+            if self.new_max_level == 2: #Check if level is the level that unlocks Dash
                 self.ui.drawBlackOverlay()
                 self.ui.unlockdashAbility()
                 if keys[pygame.K_SPACE] or keys[pygame.K_RETURN]:
                     self.createOverworld(self.currentLevel, self.new_max_level)    
-            if self.new_max_level == 3: #Check if level is the level that unlcoks Double Jump  
+            elif self.new_max_level == 3: #Check if level is the level that unlcoks Double Jump  
                 self.ui.drawBlackOverlay()
                 self.ui.unlockDoubleAbility() 
                 if keys[pygame.K_SPACE] or keys[pygame.K_RETURN]:
@@ -236,23 +241,28 @@ class Level:
                 self.updateCoins(coin.value)
 
     def checkOpossumCollisions(self):
-        opossumCollisions = pygame.sprite.spritecollide(self.player.sprite, self.opossumSprites, False)
-        print(self.player.sprite.direction.y)
+        player = self.player.sprite
+        opossumCollisions = pygame.sprite.spritecollide(player, self.opossumSprites, False)
+
+        #print(player.opossumVulnerability, player.direction.y, player.onGroundTime)
 
         if opossumCollisions:
             for opossum in opossumCollisions:
-                opossumTop = opossum.rect.top
-                playerBottom = self.player.sprite.collisionRect.bottom
-                print(playerBottom, opossumTop, self.player.sprite.direction.y)
+                collisionTime = time.time()
+                if collisionTime - player.onGroundTime >= 0.03:
+                    player.opossumVulnerability = True
 
-                if opossumTop < playerBottom and self.player.sprite.direction.y > 0:
-                    self.player.sprite.direction.y = -10
+                opossumTop = opossum.rect.top
+                playerBottom = player.collisionRect.bottom
+
+                if opossumTop < playerBottom and player.direction.y > 0 or player.opossumVulnerability == False:
+                    player.direction.y = -10
                     explosionSprite = ParticleEffect(opossum.rect.center, 'explosion', self.cameraGroup)
                     self.explosionSprites.add(explosionSprite)
                     opossum.kill()
                 else:
-                    if self.player.sprite.paused == False:
-                        self.player.sprite.getDamage()
+                    if player.paused == False:
+                        player.getDamage()
 
     def menu(self):
         if self.paused: 

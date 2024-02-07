@@ -23,6 +23,8 @@ class Player(pygame.sprite.Sprite):
 		self.facing = "right"
 		self.onGround = False
 		self.onGroundTime = time.time()
+		self.opossumVulnerability = False
+		self.firstOnGround = True
 		self.onCeiling = False
 		self.onLeft = False
 		self.onRight = False
