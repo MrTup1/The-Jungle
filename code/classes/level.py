@@ -177,6 +177,7 @@ class Level:
                     player.collisionRect.bottom = sprite.rect.top
                     player.direction.y = 0
                     player.onGround = True
+                    player.onGroundTime = time.time()
                     player.releasedJump = False
                 elif player.direction.y < 0:
                     player.collisionRect.top = sprite.rect.bottom
@@ -236,12 +237,13 @@ class Level:
 
     def checkOpossumCollisions(self):
         opossumCollisions = pygame.sprite.spritecollide(self.player.sprite, self.opossumSprites, False)
+        print(self.player.sprite.direction.y)
 
         if opossumCollisions:
             for opossum in opossumCollisions:
-                opossumCenter = opossum.rect.centery
                 opossumTop = opossum.rect.top
-                playerBottom = self.player.sprite.rect.bottom
+                playerBottom = self.player.sprite.collisionRect.bottom
+                print(playerBottom, opossumTop, self.player.sprite.direction.y)
 
                 if opossumTop < playerBottom and self.player.sprite.direction.y > 0:
                     self.player.sprite.direction.y = -10

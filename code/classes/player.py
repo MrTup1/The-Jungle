@@ -22,6 +22,7 @@ class Player(pygame.sprite.Sprite):
 		self.status = "idle"
 		self.facing = "right"
 		self.onGround = False
+		self.onGroundTime = time.time()
 		self.onCeiling = False
 		self.onLeft = False
 		self.onRight = False
