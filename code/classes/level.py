@@ -177,7 +177,7 @@ class Level:
                     player.collisionRect.bottom = sprite.rect.top
                     player.direction.y = 0
                     player.onGround = True
-                    if player.firstOnGround:
+                    if player.firstOnGround: #Get time when player first on ground
                         player.onGroundTime = time.time()
                         player.firstOnGround = False
                     player.releasedJump = False
@@ -189,7 +189,7 @@ class Level:
 
         if player.onGround and player.direction.y < 0 or player.direction.y > 1:
             player.onGround = False
-            player.firstOnGround = True
+            player.firstOnGround = True #Reset attributes
             player.opossumVulnerability = False
 
         if player.onCeiling and player.direction.y > 0:
@@ -244,18 +244,16 @@ class Level:
         player = self.player.sprite
         opossumCollisions = pygame.sprite.spritecollide(player, self.opossumSprites, False)
 
-        #print(player.opossumVulnerability, player.direction.y, player.onGroundTime)
-
         if opossumCollisions:
             for opossum in opossumCollisions:
                 collisionTime = time.time()
-                if collisionTime - player.onGroundTime >= 0.03:
-                    player.opossumVulnerability = True
+                if collisionTime - player.onGroundTime >= 0.03: #Check opossum on time longer than 30ms
+                    player.opossumVulnerability = True #Opossum can kill player when sent to true
 
                 opossumTop = opossum.rect.top
                 playerBottom = player.collisionRect.bottom
 
-                if opossumTop < playerBottom and player.direction.y > 0 or player.opossumVulnerability == False:
+                if (opossumTop < playerBottom and player.direction.y) > 0 or (opossumTop < playerBottom and player.opossumVulnerability == False): #Alt condition, so player can kill opossum 30ms before taking damge
                     player.direction.y = -10
                     explosionSprite = ParticleEffect(opossum.rect.center, 'explosion', self.cameraGroup)
                     self.explosionSprites.add(explosionSprite)
