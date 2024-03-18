@@ -28,9 +28,9 @@ class UI:
         for i in range(current):
             self.displaySurface.blit(self.healthUI, (i * 20 * 1.2 + 10, 10))
 
-    def showCoins(self, amount):
-        self.displaySurface.blit(self.coin, self.coinRect)
-        coinAmountSurface = self.font.render(str(amount), False, 'WHITE')
+    def showCoins(self, amount): #Display coin counter UI
+        self.displaySurface.blit(self.coin, self.coinRect) #Display coin sprite
+        coinAmountSurface = self.font.render(str(amount), False, 'WHITE') #Displays total coins collected (integer number), from level class
         cointAmountRect = coinAmountSurface.get_rect(midleft = (self.coinRect.right + 5, self.coinRect.centery))
         self.displaySurface.blit(coinAmountSurface, cointAmountRect)
     
@@ -80,8 +80,8 @@ class UI:
         enterRect = enterText.get_rect(center = (screenWidth//2, screenHeight //2 + 170)) #Slightly below unlock text
         self.displaySurface.blit(enterText, enterRect) 
     
-    def drawBlackOverlay(self):
+    def drawBlackOverlay(self): #Draws black overlay that is translucent in front of game, but behind UI elements
         overlay = pygame.Surface((screenWidth, screenHeight))
         overlay.fill("BLACK")
-        overlay.set_alpha(160)
+        overlay.set_alpha(160) #Semi transparent alpha value
         self.displaySurface.blit(overlay, (0,0))
