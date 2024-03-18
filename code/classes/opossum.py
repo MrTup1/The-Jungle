@@ -9,20 +9,20 @@ class Opossum(AnimatedTile):
         self.rect = self.image.get_rect() #Set new rectangle dimensions to be equal to image
         offset = 10
         offset_y = y - offset
-        self.rect.topleft = (x, offset_y)
-        self.speed = randint(3, 5)
+        self.rect.topleft = (x, offset_y) #Apply offset to opossum, as it is displayed incorrectly
+        self.speed = randint(3, 5) #Speed of an opossum varies between 3-5
 
-    def move(self):
+    def move(self): #Moves opossum
         self.rect.x += self.speed
     
-    def reverseImage(self):
+    def reverseImage(self): #Reverse sprite of opossum
         if self.speed > 0:
             self.image = pygame.transform.flip(self.image, True, False)
 
-    def reverse(self):
+    def reverse(self): #Reverse actual direction of opossum
         self.speed = self.speed * -1
         
-    def update(self):
+    def update(self): #Update function for opossum class
         self.animate()
         self.reverseImage()
         self.move()
