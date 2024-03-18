@@ -11,7 +11,7 @@ class Start():
         self.background = pygame.image.load('./graphics/ui/menu.png').convert_alpha()
         self.JungleText = pygame.image.load('./graphics/ui/JungleText.png').convert_alpha()
         self.JungleTextRect = self.JungleText.get_rect(center = (screenWidth // 2, screenHeight // 2 - 50))
-        #Import Buttons
+        #Import Button Sprites
         self.startImg = pygame.image.load("./graphics/ui/Start.png").convert_alpha()
         self.optionsImg = pygame.image.load("./graphics/ui/Options.png").convert_alpha()
         self.quitImg = pygame.image.load("./graphics/ui/Quit.png").convert_alpha() 
@@ -21,8 +21,8 @@ class Start():
         self.quitButton = Button(600, 380, self.quitImg, 1)
 
     def drawButton(self):
-        if self.startButton.draw(self.displaySurface):
-            self.createOverworld(self.currentLevel, 0) #Create overworld if start pressed
+        if self.startButton.draw(self.displaySurface): #If start button is pressed
+            self.createOverworld(self.currentLevel, 0) #Create overworld
         if self.optionsButton.draw(self.displaySurface):
             print("Options") #Placeholder
         if self.quitButton.draw(self.displaySurface):
@@ -32,7 +32,7 @@ class Start():
     def getQuit(self):
         return self.quit
     
-    def run(self):
-        self.displaySurface.blit(self.background, (0,0))
-        self.displaySurface.blit(self.JungleText, self.JungleTextRect)
-        self.drawButton()
+    def run(self): #Update function for start class
+        self.displaySurface.blit(self.background, (0,0)) #Draw background for start menu
+        self.displaySurface.blit(self.JungleText, self.JungleTextRect) #Draw logo text in start menu
+        self.drawButton() #Draw all buttons
