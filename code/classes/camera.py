@@ -7,9 +7,9 @@ class CameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
         self.displaySurface = pygame.display.get_surface()
-        self.offset = pygame.math.Vector2(0,0)
+        self.offset = pygame.math.Vector2(0,0) 
 
-        self.cameraBorders = {'left': 250, 'right': 250, 'top': 100, 'bottom': 100}
+        self.cameraBorders = {'left': 250, 'right': 250, 'top': 100, 'bottom': 100} 
         l = self.cameraBorders['left']
         t = self.cameraBorders['top'] 
         w = screenWidth - (self.cameraBorders['left'] + self.cameraBorders['right'])
@@ -18,7 +18,6 @@ class CameraGroup(pygame.sprite.Group):
         self.background = Background()
         self.halfW = screenWidth // 2
         self.halfH = screenHeight //2
-
 
     
     def boxCamera(self, target):
