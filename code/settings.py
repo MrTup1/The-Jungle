@@ -7,19 +7,6 @@ tileSize = 16
 scroll = 8
 bgScroll = 0
 temp = 0
-platform_group = pygame.sprite.Group()
-levelMap = [
-'                            ',
-'                            ',
-'                            ',
-' XX    XXX            XX    ',
-' XX P                        ',
-' XXXX         XX         XXXXXXXXXXXXXXXXXXXXXXX ',
-' XXXX       XX              ',
-' XX    X  XXXX    XX  XX    ',
-'       X  XXXX    XX  XXX   ',
-'    XXXX  XXXXXX  XX  XXXX  ',
-'XXXXXXXX  XXXXXX  XX  XXXX  ']
 
 #constants
 BLACK = (0, 0, 0)

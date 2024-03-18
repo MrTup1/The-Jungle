@@ -1,3 +1,5 @@
+#Each level has its own dictionary, which stores the file paths for each layer, which dictate where and what tiles are drawn
+#"levels" dictionary stores all these dictionaries inside another dictionary as the value, and an index as its key 
 level_0 = {
     'terrain' : './levels/1/level_1_terrain.csv',
     'coins' : './levels/1/level_1_coins.csv',
@@ -9,7 +11,7 @@ level_0 = {
     'player' : './levels/1/level_1_player.csv',
     'nodePos': (100, 400),
     'content': 'this is level 0',
-    'unlock' : 1,
+    'unlock' : 1, #Which level this level unlocks
     'nodeGraphic': './graphics/overworld/0'
 }
 
