@@ -84,4 +84,4 @@ class UI:
         overlay = pygame.Surface((screenWidth, screenHeight))
         overlay.fill("BLACK")
         overlay.set_alpha(160) #Semi transparent alpha value
-        self.displaySurface.blit(overlay, (0,0))
+        self.displaySurface.blit(overlay, (0,0)) 

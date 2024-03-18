@@ -3,7 +3,6 @@ import time
 from game_data import levels
 from functions.support import * 
 from classes.tile import AnimatedTile
-from functions.background import OverworldBackground
 
 class Node(pygame.sprite.Sprite): #Class stores all attributes and methods of a singular node(level icon) in the overworld
     def __init__(self, pos, status, iconSpeed, path):

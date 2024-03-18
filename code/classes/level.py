@@ -2,7 +2,7 @@ import pygame
 import time
 from settings import *
 from game_data import *
-from classes.tile import Tile, StaticTile, AnimatedTile, Coin, Palm, Water
+from classes.tile import Tile, StaticTile, AnimatedTile, Coin, Palm
 from classes.player import Player
 from functions.support import *
 from classes.opossum import Opossum
